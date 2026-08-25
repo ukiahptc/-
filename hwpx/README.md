@@ -41,7 +41,9 @@ python3 hwpx_generator.py --styles styles.example.json --text 내용.txt -o out.
 | `font_size_pt` | pt | 글자 크기 |
 | `bold`, `italic`, `underline` | true/false | 굵게 / 기울임 / 밑줄 |
 | `color` | #RRGGBB | 글자 색 |
+| `width_ratio_percent` | % | 장평 (기본 100) |
 | `letter_spacing_percent` | % | 자간 (-50 ~ 50) |
+| `bullet_char` | 문자 | 글머리표 (예: `"□"`, `"○"`, `"-"`), 생략하면 없음 |
 | `align` | | 정렬: `left` `center` `right` `justify` `distribute` (한글 표기 `왼쪽` `가운데` 등도 가능) |
 | `line_spacing_percent` | % | 줄간격 (한글 기본 160) |
 | `space_before_pt`, `space_after_pt` | pt | 문단 위/아래 간격 |

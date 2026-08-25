@@ -1,0 +1,96 @@
+{
+  "title": "보고서",
+  "page": {
+    "width_mm": 210,
+    "height_mm": 297,
+    "landscape": false,
+    "margins_mm": {
+      "top": 20,
+      "bottom": 15,
+      "left": 30,
+      "right": 30,
+      "header": 15,
+      "footer": 15,
+      "gutter": 0
+    }
+  },
+  "fonts": {
+    "hangul": "휴먼명조",
+    "latin": "휴먼명조"
+  },
+  "styles": [
+    {
+      "name": "□",
+      "eng_name": "Head1",
+      "font_hangul": "HY헤드라인M",
+      "font_latin": "HY헤드라인M",
+      "font_size_pt": 15,
+      "width_ratio_percent": 100,
+      "letter_spacing_percent": -5,
+      "align": "justify",
+      "line_spacing_percent": 160,
+      "left_margin_pt": 2,
+      "right_margin_pt": 7,
+      "indent_first_line_pt": 0,
+      "bullet_char": "□"
+    },
+    {
+      "name": "○",
+      "eng_name": "Head2",
+      "font_hangul": "휴먼명조",
+      "font_latin": "휴먼명조",
+      "font_size_pt": 15,
+      "width_ratio_percent": 100,
+      "letter_spacing_percent": -3,
+      "align": "justify",
+      "line_spacing_percent": 160,
+      "left_margin_pt": 19,
+      "right_margin_pt": 7,
+      "indent_first_line_pt": 0,
+      "bullet_char": "○"
+    },
+    {
+      "name": "-",
+      "eng_name": "Head3",
+      "font_hangul": "휴먼명조",
+      "font_latin": "휴먼명조",
+      "font_size_pt": 12,
+      "width_ratio_percent": 100,
+      "letter_spacing_percent": -3,
+      "align": "justify",
+      "line_spacing_percent": 160,
+      "left_margin_pt": 34,
+      "right_margin_pt": 7,
+      "indent_first_line_pt": 0,
+      "bullet_char": "-"
+    },
+    {
+      "name": "(표) 내용 기본서술",
+      "eng_name": "TableBody",
+      "font_hangul": "맑은 고딕",
+      "font_latin": "맑은 고딕",
+      "font_size_pt": 10,
+      "width_ratio_percent": 100,
+      "letter_spacing_percent": -5,
+      "align": "justify",
+      "line_spacing_percent": 130,
+      "left_margin_pt": 0,
+      "right_margin_pt": 0,
+      "indent_first_line_pt": 0
+    },
+    {
+      "name": "(표) 내용 가운데",
+      "eng_name": "TableCenter",
+      "font_hangul": "맑은 고딕",
+      "font_latin": "맑은 고딕",
+      "font_size_pt": 10,
+      "width_ratio_percent": 100,
+      "letter_spacing_percent": -5,
+      "align": "center",
+      "line_spacing_percent": 130,
+      "left_margin_pt": 0,
+      "right_margin_pt": 0,
+      "indent_first_line_pt": 0
+    }
+  ]
+}

@@ -62,7 +62,9 @@ DEFAULT_STYLE = {
     "italic": False,
     "underline": False,
     "color": "#000000",
+    "width_ratio_percent": 100,    # 장평 (%)
     "letter_spacing_percent": 0,   # 자간 (-50 ~ 50)
+    "bullet_char": None,           # 글머리표 문자 (예: "□"), None이면 없음
     "align": "justify",
     "line_spacing_percent": 160,   # 줄간격 (%)
     "space_before_pt": 0.0,        # 문단 위 간격
@@ -169,7 +171,8 @@ def build_char_pr(idx, st, ref):
         '<hh:fontRef hangul="%(hangul)d" latin="%(latin)d" hanja="%(hanja)d" '
         'japanese="%(japanese)d" other="%(other)d" symbol="%(symbol)d" user="%(user)d"/>' % ref
     )
-    for tag, val in (("ratio", 100), ("spacing", spacing), ("relSz", 100), ("offset", 0)):
+    ratio = int(st["width_ratio_percent"])
+    for tag, val in (("ratio", ratio), ("spacing", spacing), ("relSz", 100), ("offset", 0)):
         parts.append(
             '<hh:%s hangul="%d" latin="%d" hanja="%d" japanese="%d" other="%d" symbol="%d" user="%d"/>'
             % (tag, val, val, val, val, val, val, val)
@@ -187,13 +190,17 @@ def build_char_pr(idx, st, ref):
     return "".join(parts)
 
 
-def build_para_pr(idx, st):
+def build_para_pr(idx, st, bullet_id=0):
     align = ALIGN_MAP.get(str(st["align"]).lower(), str(st["align"]).upper())
+    if bullet_id:
+        heading = '<hh:heading type="BULLET" idRef="%d" level="0"/>' % bullet_id
+    else:
+        heading = '<hh:heading type="NONE" idRef="0" level="0"/>'
     parts = [
         '<hh:paraPr id="%d" tabPrIDRef="0" condense="0" fontLineHeight="0" '
         'snapToGrid="1" suppressLineNumbers="0" checked="0">' % idx,
         '<hh:align horizontal="%s" vertical="BASELINE"/>' % align,
-        '<hh:heading type="NONE" idRef="0" level="0"/>',
+        heading,
         '<hh:breakSetting breakLatinWord="KEEP_WORD" breakNonLatinWord="BREAK_WORD" '
         'widowOrphan="0" keepWithNext="0" keepLines="0" pageBreakBefore="0" lineWrap="BREAK"/>',
         '<hh:autoSpacing eAsianEng="0" eAsianNum="0"/>',
@@ -223,12 +230,42 @@ def build_numbering():
     return '<hh:numberings itemCnt="1"><hh:numbering id="1" start="0">%s</hh:numbering></hh:numberings>' % "".join(heads)
 
 
+def build_bullets(styles):
+    """스타일에서 쓰인 글머리표 문자를 모아 hh:bullets XML과
+    스타일별 bullet id 목록(글머리표 없으면 0)을 돌려준다."""
+    chars = []
+    ids = []
+    for st in styles:
+        ch = st.get("bullet_char")
+        if not ch:
+            ids.append(0)
+            continue
+        if ch not in chars:
+            chars.append(ch)
+        ids.append(chars.index(ch) + 1)
+    if not chars:
+        return "", ids
+    parts = ['<hh:bullets itemCnt="%d">' % len(chars)]
+    for i, ch in enumerate(chars):
+        parts.append(
+            '<hh:bullet id="%d" char=%s checkedChar="" useImage="0">'
+            '<hh:img binaryItemIDRef="" bright="0" contrast="0" effect="REAL_PIC"/>'
+            '<hh:paraHead start="1" level="1" align="LEFT" useInstWidth="0" autoIndent="0" '
+            'widthAdjust="0" textOffsetType="PERCENT" textOffset="50" numFormat="DIGIT" '
+            'charPrIDRef="4294967295" checkable="0">^1.</hh:paraHead>'
+            '</hh:bullet>' % (i + 1, quoteattr(ch))
+        )
+    parts.append('</hh:bullets>')
+    return "".join(parts), ids
+
+
 def build_header_xml(cfg):
     styles = cfg["styles"]
     fontfaces_xml, refs = build_fontfaces(styles, cfg["fonts"])
 
+    bullets_xml, bullet_ids = build_bullets(styles)
     char_prs = "".join(build_char_pr(i, st, refs[i]) for i, st in enumerate(styles))
-    para_prs = "".join(build_para_pr(i, st) for i, st in enumerate(styles))
+    para_prs = "".join(build_para_pr(i, st, bullet_ids[i]) for i, st in enumerate(styles))
 
     style_entries = []
     for i, st in enumerate(styles):
@@ -249,6 +286,7 @@ def build_header_xml(cfg):
         + '<hh:charProperties itemCnt="%d">%s</hh:charProperties>' % (len(styles), char_prs)
         + '<hh:tabProperties itemCnt="1"><hh:tabPr id="0" autoTabLeft="0" autoTabRight="0"/></hh:tabProperties>'
         + build_numbering()
+        + bullets_xml
         + '<hh:paraProperties itemCnt="%d">%s</hh:paraProperties>' % (len(styles), para_prs)
         + '<hh:styles itemCnt="%d">%s</hh:styles>' % (len(styles), "".join(style_entries))
         + '</hh:refList>'

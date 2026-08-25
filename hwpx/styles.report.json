@@ -117,6 +117,21 @@
       "bullet_char": "-"
     },
     {
+      "name": "·",
+      "eng_name": "Head4",
+      "font_hangul": "휴먼명조",
+      "font_latin": "휴먼명조",
+      "font_size_pt": 12,
+      "width_ratio_percent": 100,
+      "letter_spacing_percent": -3,
+      "align": "justify",
+      "line_spacing_percent": 160,
+      "left_margin_pt": 49,
+      "right_margin_pt": 7,
+      "indent_first_line_pt": 0,
+      "bullet_char": "·"
+    },
+    {
       "name": "(표) 내용 기본서술",
       "eng_name": "TableBody",
       "font_hangul": "맑은 고딕",

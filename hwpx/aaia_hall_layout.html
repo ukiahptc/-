@@ -1,0 +1,486 @@
+<title>로얄볼룸 배치 설계</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --ground:#F4F6F9;--surface:#FFFFFF;--surface-2:#EEF1F6;
+    --ink:#14181F;--ink-soft:#404A59;--ink-faint:#6B7688;
+    --line:#DCE1EA;--line-strong:#C3CBD8;
+    --cobalt:#2C55D4;--cobalt-deep:#1E3D9E;--cobalt-tint:#E7ECFB;
+    --amber:#C97E12;--amber-bright:#E0A32E;--amber-tint:#FBF0DA;
+    --ok:#1E7A56;--ok-tint:#DBF0E6;--warn:#B4472B;--warn-tint:#F8E4DE;
+    --shadow:12px 14px 40px rgba(20,24,31,.09);
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme:dark){
+      --ground:#0E1116;--surface:#161B23;--surface-2:#1E242E;
+      --ink:#E8ECF3;--ink-soft:#AEB8C7;--ink-faint:#7C8799;
+      --line:#28303B;--line-strong:#3A4452;
+      --cobalt:#6E90F5;--cobalt-deep:#8AA6FF;--cobalt-tint:#1A2438;
+      --amber:#E0A32E;--amber-bright:#F0BC55;--amber-tint:#2A2213;
+      --ok:#4FBF92;--ok-tint:#132A20;--warn:#E48166;--warn-tint:#2C1712;
+      --shadow:14px 16px 44px rgba(0,0,0,.42);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0E1116;--surface:#161B23;--surface-2:#1E242E;
+    --ink:#E8ECF3;--ink-soft:#AEB8C7;--ink-faint:#7C8799;
+    --line:#28303B;--line-strong:#3A4452;
+    --cobalt:#6E90F5;--cobalt-deep:#8AA6FF;--cobalt-tint:#1A2438;
+    --amber:#E0A32E;--amber-bright:#F0BC55;--amber-tint:#2A2213;
+    --ok:#4FBF92;--ok-tint:#132A20;--warn:#E48166;--warn-tint:#2C1712;
+    --shadow:14px 16px 44px rgba(0,0,0,.42);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--ground);color:var(--ink);
+    font-family:"IBM Plex Sans KR","Gothic A1",system-ui,sans-serif;line-height:1.72;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .mono{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-variant-numeric:tabular-nums}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 32px}
+  @media (max-width:640px){.wrap{padding:0 20px}}
+
+  header.hero{border-bottom:1px solid var(--line);
+    background:radial-gradient(120% 100% at 88% -10%, var(--cobalt-tint) 0%, transparent 55%)}
+  .hero-in{padding:56px 0 44px}
+  .kick{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cobalt-deep);font-weight:600;margin-bottom:16px}
+  h1{font-family:"Gothic A1",sans-serif;font-weight:900;font-size:clamp(32px,5.4vw,56px);line-height:1.04;letter-spacing:-.03em;margin:0;text-wrap:balance}
+  .hero-sub{margin:20px 0 0;max-width:58ch;color:var(--ink-soft);font-size:16.5px}
+
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .eyebrow{display:flex;align-items:center;gap:12px;font-family:"IBM Plex Mono",monospace;
+    font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 8px}
+  .eyebrow .no{color:var(--cobalt);border:1px solid var(--line-strong);border-radius:5px;padding:1px 7px;font-weight:600}
+  h2.sec{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:clamp(24px,3.4vw,34px);
+    letter-spacing:-.02em;line-height:1.14;margin:0 0 12px;text-wrap:balance}
+  .lead{max-width:62ch;color:var(--ink-soft);font-size:15.5px;margin:0 0 34px}
+  .lead b{color:var(--ink)}
+
+  /* constraint cards */
+  .cons{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media (max-width:720px){.cons{grid-template-columns:1fr}}
+  .cn{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 24px;position:relative;overflow:hidden}
+  .cn::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--cobalt)}
+  .cn.bad::before{background:var(--warn)}
+  .cn .t{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--cobalt-deep)}
+  .cn.bad .t{color:var(--warn)}
+  .cn h3{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:18px;margin:8px 0 8px;letter-spacing:-.01em}
+  .cn p{margin:0;font-size:14.5px;color:var(--ink-soft)}
+
+  /* comparison table */
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+  table.cmp{width:100%;border-collapse:collapse;font-size:14px;min-width:640px}
+  table.cmp th{text-align:left;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);
+    font-weight:600;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+  table.cmp td{padding:15px 18px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-soft)}
+  table.cmp tr:last-child td{border-bottom:0}
+  table.cmp tr.pick td{background:var(--cobalt-tint)}
+  table.cmp .plan{font-weight:700;color:var(--ink);white-space:nowrap}
+  table.cmp .plan small{display:block;font-weight:500;color:var(--ink-faint);font-size:11.5px;font-family:"IBM Plex Mono",monospace;margin-top:2px}
+  table.cmp .num{font-family:"IBM Plex Mono",monospace;color:var(--ink);white-space:nowrap}
+  table.cmp tr.pick .num{color:var(--cobalt-deep);font-weight:600}
+  .pickmark{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;
+    color:#fff;background:var(--cobalt);border-radius:4px;padding:1px 6px;margin-left:6px}
+
+  /* plan figure */
+  .fig{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:var(--shadow)}
+  .dgm{width:100%;height:auto;display:block;border-radius:12px;background:var(--surface-2)}
+  .dgm .room{fill:var(--surface-2);stroke:var(--line-strong);stroke-width:2}
+  .dgm .screen{fill:var(--ink)}
+  .dgm .podium{fill:var(--cobalt)}
+  .dgm .stand{fill:var(--surface);stroke:var(--cobalt);stroke-width:1.8}
+  .dgm .bfoot{fill:var(--amber-tint);stroke:color-mix(in srgb,var(--amber) 40%,transparent);stroke-width:1.2}
+  .dgm .btbl{fill:var(--surface);stroke:var(--amber);stroke-width:1.5}
+  .dgm .bseat{fill:var(--amber-bright)}
+  .dgm .util{fill:var(--surface);stroke:var(--line-strong);stroke-width:1.4}
+  .dgm .divider{stroke:var(--line-strong);stroke-width:1.6;stroke-dasharray:6 5;fill:none}
+  .dgm .plant{fill:var(--ok);opacity:.55}
+  .dgm .flowline{fill:none;stroke:var(--cobalt);stroke-width:1.4;stroke-dasharray:5 4;opacity:.75}
+  .dgm text{font-family:"IBM Plex Sans KR",sans-serif;font-size:12px;fill:var(--ink-soft)}
+  .dgm .zone{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:14px;fill:var(--ink)}
+  .dgm .num{font-family:"IBM Plex Mono",monospace;font-size:11px;fill:var(--ink-faint)}
+  .dgm .tag{font-family:"IBM Plex Mono",monospace;font-size:10px;fill:var(--amber);font-weight:600}
+  .dgm .onscreen{fill:var(--ground);font-size:11px}
+  .fig-cap{margin:18px 4px 0;font-size:13.5px;color:var(--ink-faint);line-height:1.7}
+  .fig-cap b{color:var(--ink-soft);font-weight:600}
+  .fig-legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-faint)}
+  .fig-legend span{display:inline-flex;align-items:center;gap:8px}
+  .fig-legend i{width:13px;height:13px;border-radius:4px;display:inline-block;border:1.5px solid var(--line-strong)}
+
+  /* mode pair */
+  .modes{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+  @media (max-width:760px){.modes{grid-template-columns:1fr}}
+  .mode{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .mode .mh{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+  .mode .mt{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--cobalt-deep);font-weight:600}
+  .mode .mn{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:16px}
+  .mode p{margin:14px 0 0;font-size:13.5px;color:var(--ink-soft)}
+  .dgm .blob{fill:var(--cobalt);opacity:.20}
+  .dgm .blob-a{fill:var(--amber-bright);opacity:.28}
+
+  /* math strip */
+  .math{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:6px}
+  @media (max-width:720px){.math{grid-template-columns:1fr 1fr}}
+  .mi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 20px}
+  .mi .n{font-family:"Gothic A1",sans-serif;font-weight:900;font-size:32px;letter-spacing:-.02em;line-height:1;color:var(--cobalt)}
+  .mi .n small{font-size:14px;font-weight:700;color:var(--ink-soft);margin-left:3px}
+  .mi.amber .n{color:var(--amber)}
+  .mi .k{margin-top:8px;font-size:12.5px;color:var(--ink-faint);line-height:1.55}
+
+  .points{list-style:none;margin:26px 0 0;padding:0;display:flex;flex-direction:column;gap:13px}
+  .points li{position:relative;padding-left:22px;font-size:14.5px;color:var(--ink-soft)}
+  .points li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;border-radius:2px;background:var(--cobalt);transform:rotate(45deg)}
+  .points li b{color:var(--ink);font-weight:600}
+
+  .check{background:var(--amber-tint);border:1px solid color-mix(in srgb,var(--amber) 26%,transparent);
+    border-radius:16px;padding:26px 28px}
+  .check h3{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:17px;margin:0 0 14px;color:var(--amber)}
+  .check ul{margin:0;padding-left:18px;font-size:14px;color:var(--ink-soft)}
+  .check li{margin-bottom:9px}
+  .check li:last-child{margin-bottom:0}
+  .check li b{color:var(--ink);font-weight:600}
+
+  footer{padding:44px 0 60px;color:var(--ink-faint);font-size:13px}
+  .foot-in{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center}
+  .foot-in .fb{font-family:"Gothic A1",sans-serif;font-weight:800;color:var(--ink);font-size:15px}
+  .prov{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--amber);
+    border:1px solid color-mix(in srgb,var(--amber) 34%,var(--line));border-radius:5px;padding:1px 7px}
+  .foot-note{margin-top:12px;font-size:12px;max-width:66ch;line-height:1.6}
+
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+
+<header class="hero">
+  <div class="wrap hero-in">
+    <div class="kick">AAIA 2026 · 2F 로얄볼룸 · FLOOR PLAN</div>
+    <h1>스탠딩과 좌석을<br>한 방에 놓는 법</h1>
+    <p class="hero-sub">연회 원탁 1:1 배치를 폐기하고, 스탠딩 존과 좌석 상담 존을 나눈 혼합 배치를 제안합니다. 같은 방에서 소개 발표 40분과 상담 55분을 <b>재배치 없이</b> 처리하는 것이 설계 목표입니다.</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- 문제 -->
+  <section>
+    <div class="wrap">
+      <p class="eyebrow"><span class="no">01</span>문제 정의</p>
+      <h2 class="sec">연회 원탁은 두 가지를 동시에 놓친다</h2>
+      <p class="lead">8~10인용 연회 원탁은 의자까지 약 <b>9㎡</b>를 점유합니다. 여기에 2개사만 마주 앉히면 면적의 절반 이상이 사장됩니다. 그런데 진짜 문제는 상담이 아니라 그 앞 순서에 있습니다.</p>
+      <div class="cons">
+        <div class="cn bad reveal">
+          <div class="t">PROBLEM 01</div>
+          <h3>상담 — 공간의 절반이 논다</h3>
+          <p>테이블 14개 × 1:1 = 회전당 14건. 방은 100명 넘게 수용할 수 있는데 실제로 대화에 참여하는 인원은 28명뿐입니다. 처리량이 신청 규모를 따라가지 못합니다.</p>
+        </div>
+        <div class="cn bad reveal">
+          <div class="t">PROBLEM 02</div>
+          <h3>발표 — 절반이 등을 돌린다</h3>
+          <p>18:05~18:45 소개 발표 40분 동안 원탁에 둘러앉으면 참석자 절반이 스크린을 등집니다. 몸을 틀어 앉아야 하고, 6개사 발표 내내 자세가 불편합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 대안 비교 -->
+  <section>
+    <div class="wrap">
+      <p class="eyebrow"><span class="no">02</span>대안 비교</p>
+      <h2 class="sec">네 가지를 놓고 계산했다</h2>
+      <p class="lead">칵테일 테이블(지름 60~70cm)은 서서 쓰는 공간을 포함해도 약 <b>2.25㎡</b>로, 연회 원탁의 4분의 1입니다. 같은 면적에 스테이션을 3~4배 놓을 수 있습니다.</p>
+      <div class="tbl-wrap reveal">
+        <table class="cmp">
+          <thead>
+            <tr><th>배치안</th><th>스테이션</th><th>3회전 처리</th><th>동시 수용</th><th>한계</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="plan">A. 연회 원탁 1:1<small>기존안</small></td>
+              <td class="num">14</td><td class="num">42건</td><td class="num">28명</td>
+              <td>면적 절반 사장, 발표 시 등을 돌림</td>
+            </tr>
+            <tr>
+              <td class="plan">B. 원탁 그룹<small>3~4개사 착석</small></td>
+              <td class="num">14</td><td class="num">집계 불가</td><td class="num">~110명</td>
+              <td>1:1이 아니어서 상담 건수 지표를 포기해야 함</td>
+            </tr>
+            <tr>
+              <td class="plan">C. 전면 스탠딩<small>좌석 없음</small></td>
+              <td class="num">30</td><td class="num">90건</td><td class="num">~120명</td>
+              <td>자료 시연 불가, 장시간 대화·접근성 취약</td>
+            </tr>
+            <tr class="pick">
+              <td class="plan">D. 혼합<small>스탠딩 22 + 좌석 8</small></td>
+              <td class="num">30</td><td class="num">90건</td><td class="num">~112명</td>
+              <td>구역 분리 안내 필요 <span class="pickmark">권장</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="points reveal">
+        <li><b>C가 아니라 D인 이유.</b> 처리량은 같지만, 데이터 샘플을 노트북으로 열어 보이는 상담과 40분을 서 있기 어려운 참가자를 스탠딩만으로는 감당할 수 없습니다.</li>
+        <li><b>B를 버린 이유.</b> 그룹 대화는 편하지만 “상담 건수”가 성과 지표인 이상, 측정 가능한 1:1이 최소한 일부는 남아야 합니다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 평면도 -->
+  <section>
+    <div class="wrap">
+      <p class="eyebrow"><span class="no">03</span>권장 평면</p>
+      <h2 class="sec">앞뒤로 가르고, 스탠딩을 앞에 둔다</h2>
+      <p class="lead">분리선을 <b>좌우가 아니라 앞뒤 방향</b>으로 세우는 것이 이 배치의 핵심입니다. 좌석 존이 벽면을 따라 앞뒤로 늘어서므로, 앉아 있어도 스크린이 정면으로 보입니다. 스탠딩을 전면에 밀집시켜 발표 때 화면 앞 밀도를 자연스럽게 확보합니다.</p>
+      <div class="fig reveal">
+        <svg class="dgm" viewBox="0 0 880 596" role="img" aria-label="로얄볼룸 혼합 배치 평면도 — 전면 스크린, 중앙 스탠딩 존 22개, 우측 좌석 상담 부스 8개, 후면 안내 및 다과">
+          <defs>
+            <g id="booth">
+              <rect class="bfoot" x="0" y="0" width="115" height="52" rx="7"/>
+              <rect class="btbl" x="27" y="11" width="61" height="30" rx="4"/>
+              <circle class="bseat" cx="12" cy="26" r="8"/>
+              <circle class="bseat" cx="103" cy="26" r="8"/>
+            </g>
+            <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+              <path d="M0 0 L8 4 L0 8 z" fill="var(--cobalt)"/>
+            </marker>
+            <marker id="ar2" markerWidth="10" markerHeight="10" refX="8" refY="4.5" orient="auto">
+              <path d="M0 0 L9 4.5 L0 9 z" fill="var(--ink-faint)"/>
+            </marker>
+          </defs>
+
+          <rect class="room" x="30" y="24" width="820" height="516" rx="8"/>
+
+          <!-- front: screen + podium -->
+          <rect class="screen" x="330" y="32" width="230" height="18" rx="3"/>
+          <text class="onscreen" x="445" y="45" text-anchor="middle">소개 발표 화면</text>
+          <rect class="podium" x="425" y="58" width="40" height="22" rx="3"/>
+          <text class="num" x="445" y="98" text-anchor="middle">연단 · 진행석</text>
+
+          <!-- zone labels -->
+          <text class="zone" x="286" y="128" text-anchor="middle">스탠딩 존</text>
+          <text class="num" x="286" y="146" text-anchor="middle">칵테일 테이블 22 · 주제 표지</text>
+          <text class="zone" x="697" y="128" text-anchor="middle">좌석 상담 존</text>
+          <text class="num" x="697" y="146" text-anchor="middle">배정 1:1 부스 8 · 3회전</text>
+
+          <!-- divider (front-back) -->
+          <path class="divider" d="M545 155 L545 540"/>
+          <circle class="plant" cx="545" cy="180" r="5"/>
+          <circle class="plant" cx="545" cy="252" r="5"/>
+          <circle class="plant" cx="545" cy="324" r="5"/>
+          <circle class="plant" cx="545" cy="396" r="5"/>
+          <circle class="plant" cx="545" cy="468" r="5"/>
+
+          <!-- standing tables : 22 -->
+          <circle class="stand" cx="95"  cy="175" r="13"/><circle class="stand" cx="180" cy="175" r="13"/>
+          <circle class="stand" cx="265" cy="175" r="13"/><circle class="stand" cx="350" cy="175" r="13"/>
+          <circle class="stand" cx="435" cy="175" r="13"/>
+          <circle class="stand" cx="137" cy="242" r="13"/><circle class="stand" cx="222" cy="242" r="13"/>
+          <circle class="stand" cx="307" cy="242" r="13"/><circle class="stand" cx="392" cy="242" r="13"/>
+          <circle class="stand" cx="477" cy="242" r="13"/>
+          <circle class="stand" cx="95"  cy="309" r="13"/><circle class="stand" cx="180" cy="309" r="13"/>
+          <circle class="stand" cx="265" cy="309" r="13"/><circle class="stand" cx="350" cy="309" r="13"/>
+          <circle class="stand" cx="435" cy="309" r="13"/>
+          <circle class="stand" cx="137" cy="376" r="13"/><circle class="stand" cx="222" cy="376" r="13"/>
+          <circle class="stand" cx="307" cy="376" r="13"/><circle class="stand" cx="392" cy="376" r="13"/>
+          <circle class="stand" cx="477" cy="376" r="13"/>
+          <circle class="stand" cx="250" cy="443" r="13"/><circle class="stand" cx="400" cy="443" r="13"/>
+
+          <!-- free movement hint -->
+          <path class="flowline" d="M108 208 Q 160 222 165 232" marker-end="url(#ar)"/>
+          <path class="flowline" d="M320 342 Q 360 356 378 366" marker-end="url(#ar)"/>
+          <text class="num" x="286" y="470" text-anchor="middle">회전마다 원하는 주제 테이블로 자유 이동</text>
+
+          <!-- seated booths : 8 -->
+          <use href="#booth" x="580" y="162"/><use href="#booth" x="715" y="162"/>
+          <use href="#booth" x="580" y="250"/><use href="#booth" x="715" y="250"/>
+          <use href="#booth" x="580" y="338"/><use href="#booth" x="715" y="338"/>
+          <use href="#booth" x="580" y="426"/><use href="#booth" x="715" y="426"/>
+          <text class="tag" x="637" y="192" text-anchor="middle">B1</text>
+          <text class="tag" x="772" y="192" text-anchor="middle">B2</text>
+          <text class="tag" x="637" y="280" text-anchor="middle">B3</text>
+          <text class="tag" x="772" y="280" text-anchor="middle">B4</text>
+          <text class="tag" x="637" y="368" text-anchor="middle">B5</text>
+          <text class="tag" x="772" y="368" text-anchor="middle">B6</text>
+          <text class="tag" x="637" y="456" text-anchor="middle">B7</text>
+          <text class="tag" x="772" y="456" text-anchor="middle">B8</text>
+          <text class="num" x="697" y="502" text-anchor="middle">벽면을 따라 배치 — 착석 상태에서도 스크린 정면</text>
+
+          <!-- rear utilities -->
+          <rect class="util" x="150" y="490" width="140" height="40" rx="6"/>
+          <text class="num" x="220" y="514" text-anchor="middle">안내 · 매칭보드</text>
+          <rect class="util" x="310" y="490" width="120" height="40" rx="6"/>
+          <text class="num" x="370" y="514" text-anchor="middle">다과 스테이션</text>
+
+          <!-- entrance -->
+          <path d="M92 578 L92 546" stroke="var(--ink-faint)" stroke-width="2" fill="none" marker-end="url(#ar2)"/>
+          <text class="num" x="112" y="572" text-anchor="start">입구</text>
+        </svg>
+
+        <div class="fig-legend">
+          <span><i style="background:var(--surface);border-color:var(--cobalt)"></i>칵테일 테이블 (스탠딩)</span>
+          <span><i style="background:var(--amber-tint);border-color:var(--amber)"></i>좌석 상담 부스 (배정 1:1)</span>
+          <span><i style="background:var(--ink);border-color:var(--ink)"></i>스크린</span>
+          <span><i style="background:var(--ok);border-color:var(--ok)"></i>화분·파티션 분리선</span>
+        </div>
+
+        <p class="fig-cap"><b>배치 원칙 넷.</b>
+          ① 분리선을 앞뒤로 세워 좌석 존에서도 스크린이 보이게 한다.
+          ② 스탠딩을 전면에 밀집시켜 발표 때 화면 앞 밀도를 확보한다.
+          ③ 소음·혼잡을 부르는 다과와 안내는 좌석 존 반대편, 입구 쪽에 몰아 조용한 상담 구역을 지킨다.
+          ④ 중앙을 비워 회전 이동 동선이 짧고 눈에 보이게 한다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 두 모드 -->
+  <section>
+    <div class="wrap">
+      <p class="eyebrow"><span class="no">04</span>두 모드</p>
+      <h2 class="sec">가구는 그대로, 사람만 움직인다</h2>
+      <p class="lead">부속홀은 사전 설치 후 대기하고, 메인홀 종료 후 전환 없이 바로 진행합니다. 발표에서 상담으로 넘어갈 때 <b>물리적으로 옮기는 것이 하나도 없습니다.</b></p>
+      <div class="modes">
+        <div class="mode reveal">
+          <div class="mh"><span class="mt">18:05–18:45</span><span class="mn">발표 모드</span></div>
+          <svg class="dgm" viewBox="0 0 420 268" role="img" aria-label="발표 모드 — 참석자가 전면 스크린 앞에 밀집">
+            <rect class="room" x="14" y="14" width="392" height="240" rx="6"/>
+            <rect class="screen" x="150" y="20" width="120" height="11" rx="2"/>
+            <ellipse class="blob" cx="160" cy="105" rx="118" ry="62"/>
+            <circle class="stand" cx="60" cy="70" r="8"/><circle class="stand" cx="120" cy="70" r="8"/>
+            <circle class="stand" cx="180" cy="70" r="8"/><circle class="stand" cx="240" cy="70" r="8"/>
+            <circle class="stand" cx="90" cy="125" r="8"/><circle class="stand" cx="150" cy="125" r="8"/>
+            <circle class="stand" cx="210" cy="125" r="8"/><circle class="stand" cx="60" cy="180" r="8"/>
+            <circle class="stand" cx="120" cy="180" r="8"/><circle class="stand" cx="180" cy="180" r="8"/>
+            <circle class="stand" cx="240" cy="180" r="8"/><circle class="stand" cx="150" cy="222" r="8"/>
+            <path class="divider" d="M290 40 L290 246"/>
+            <rect class="bfoot" x="305" y="55" width="90" height="30" rx="5"/>
+            <rect class="bfoot" x="305" y="103" width="90" height="30" rx="5"/>
+            <rect class="bfoot" x="305" y="151" width="90" height="30" rx="5"/>
+            <rect class="bfoot" x="305" y="199" width="90" height="30" rx="5"/>
+            <ellipse class="blob-a" cx="350" cy="70" rx="42" ry="16"/>
+            <ellipse class="blob-a" cx="350" cy="118" rx="42" ry="16"/>
+            <text class="num" x="350" y="248" text-anchor="middle">착석 관람석</text>
+          </svg>
+          <p>스탠딩 존이 그대로 관람석이 됩니다. 좌석 부스는 오래 서 있기 어려운 참가자의 <b>착석 관람석</b>으로 쓰여, 접근성 문제도 함께 풀립니다.</p>
+        </div>
+        <div class="mode reveal">
+          <div class="mh"><span class="mt">18:45–19:40</span><span class="mn">상담 모드</span></div>
+          <svg class="dgm" viewBox="0 0 420 268" role="img" aria-label="상담 모드 — 참석자가 각 스테이션으로 분산하고 회전 이동">
+            <defs>
+              <marker id="arm" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+                <path d="M0 0 L8 4 L0 8 z" fill="var(--cobalt)"/>
+              </marker>
+            </defs>
+            <rect class="room" x="14" y="14" width="392" height="240" rx="6"/>
+            <rect class="screen" x="150" y="20" width="120" height="11" rx="2"/>
+            <circle class="blob" cx="60" cy="70" r="19"/><circle class="blob" cx="120" cy="70" r="19"/>
+            <circle class="blob" cx="180" cy="70" r="19"/><circle class="blob" cx="240" cy="70" r="19"/>
+            <circle class="blob" cx="90" cy="125" r="19"/><circle class="blob" cx="150" cy="125" r="19"/>
+            <circle class="blob" cx="210" cy="125" r="19"/><circle class="blob" cx="60" cy="180" r="19"/>
+            <circle class="blob" cx="120" cy="180" r="19"/><circle class="blob" cx="180" cy="180" r="19"/>
+            <circle class="blob" cx="240" cy="180" r="19"/><circle class="blob" cx="150" cy="222" r="19"/>
+            <circle class="stand" cx="60" cy="70" r="8"/><circle class="stand" cx="120" cy="70" r="8"/>
+            <circle class="stand" cx="180" cy="70" r="8"/><circle class="stand" cx="240" cy="70" r="8"/>
+            <circle class="stand" cx="90" cy="125" r="8"/><circle class="stand" cx="150" cy="125" r="8"/>
+            <circle class="stand" cx="210" cy="125" r="8"/><circle class="stand" cx="60" cy="180" r="8"/>
+            <circle class="stand" cx="120" cy="180" r="8"/><circle class="stand" cx="180" cy="180" r="8"/>
+            <circle class="stand" cx="240" cy="180" r="8"/><circle class="stand" cx="150" cy="222" r="8"/>
+            <path class="flowline" d="M78 88 Q 100 108 84 112" marker-end="url(#arm)"/>
+            <path class="flowline" d="M196 142 Q 220 160 226 166" marker-end="url(#arm)"/>
+            <path class="divider" d="M290 40 L290 246"/>
+            <rect class="bfoot" x="305" y="55" width="90" height="30" rx="5"/>
+            <rect class="bfoot" x="305" y="103" width="90" height="30" rx="5"/>
+            <rect class="bfoot" x="305" y="151" width="90" height="30" rx="5"/>
+            <rect class="bfoot" x="305" y="199" width="90" height="30" rx="5"/>
+            <ellipse class="blob-a" cx="350" cy="70" rx="42" ry="16"/>
+            <ellipse class="blob-a" cx="350" cy="118" rx="42" ry="16"/>
+            <ellipse class="blob-a" cx="350" cy="166" rx="42" ry="16"/>
+            <ellipse class="blob-a" cx="350" cy="214" rx="42" ry="16"/>
+            <text class="num" x="350" y="248" text-anchor="middle">배정 1:1 진행</text>
+          </svg>
+          <p>벨과 함께 스탠딩은 원하는 주제 테이블로, 좌석 부스는 배정표대로 회전합니다. 의자를 정리할 일이 없어 <b>전환이 빠릅니다.</b></p>
+        </div>
+      </div>
+      <p class="fig-cap" style="margin-top:20px">모식도이며 실제 테이블 수·비율과 다릅니다. 두 그림의 가구 위치는 동일합니다 — 달라지는 것은 사람의 분포뿐입니다.</p>
+    </div>
+  </section>
+
+  <!-- 스탠딩 운영 -->
+  <section>
+    <div class="wrap">
+      <p class="eyebrow"><span class="no">05</span>스탠딩 존 운영</p>
+      <h2 class="sec">테이블에 주제를 붙인다</h2>
+      <p class="lead">스탠딩을 그냥 열어두면 기획안이 지적한 <b>‘대화 상대 선정 곤란’</b>이 그대로 재발합니다. 테이블마다 도메인·주제 표지를 세워, 배정을 못 받은 참가자도 갈 곳이 분명하게 만듭니다.</p>
+      <ul class="points reveal">
+        <li><b>표지 구성</b> — 4개 분과(기술·산업 / 생태계 / 안전신뢰 / 도입)에 교차 주제(데이터, 결제·정산, 실증 파트너, 인재)를 더해 22개 테이블에 배분.</li>
+        <li><b>회전 방식</b> — 좌석 부스가 벨에 맞춰 배정 회전을 도는 동안, 스탠딩은 같은 벨에 원하는 주제로 자유 이동. 3회전이면 한 참가자가 최대 3개 주제를 돈다.</li>
+        <li><b>집계</b> — 회전별 테이블 인원을 스태프가 체크해 ‘주제별 교류 인원’으로 기록. 배정 1:1 건수와 별도 지표로 잡는다.</li>
+        <li><b>명찰 연동</b> — 협업·실증(앰버) 참가자는 실증 파트너 테이블로, 정보 탐색은 도메인 테이블로 자연스럽게 흐른다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 처리량 -->
+  <section>
+    <div class="wrap">
+      <p class="eyebrow"><span class="no">06</span>처리량</p>
+      <h2 class="sec">기존안 대비 약 2.2배</h2>
+      <p class="lead">아래는 홀 면적을 약 270㎡로 가정한 추정치입니다. 실제 치수와 기둥 유무는 호텔 확인이 필요합니다.</p>
+      <div class="math">
+        <div class="mi reveal"><div class="n">30<small>개</small></div><div class="k">스테이션<br>스탠딩 22 + 좌석 8</div></div>
+        <div class="mi amber reveal"><div class="n">24<small>건</small></div><div class="k">배정 1:1 상담<br>좌석 8 × 3회전</div></div>
+        <div class="mi reveal"><div class="n">66<small>슬롯</small></div><div class="k">주제 스테이션 교류<br>스탠딩 22 × 3회전</div></div>
+        <div class="mi reveal"><div class="n">~112<small>명</small></div><div class="k">동시 수용<br>후반부 잔류 추정과 부합</div></div>
+      </div>
+      <ul class="points reveal">
+        <li><b>기존 42건 → 90건.</b> 좌석 부스가 8개로 줄었는데도 총 처리량이 두 배가 되는 것은, 남는 면적을 스탠딩이 흡수하기 때문입니다.</li>
+        <li><b>배정 1:1은 오히려 정예화됩니다.</b> 8부스 24건은 매치 강도가 높은 신청만 선별해 배정하고, 나머지 수요는 주제 스테이션으로 흘려보냅니다.</li>
+        <li><b>테이블 수 부족 리스크가 해소됩니다.</b> 기존 “원탁 12~15개 확보 가능한가”라는 제약이, 칵테일 테이블 기준으로는 거의 걸리지 않습니다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 확인 -->
+  <section>
+    <div class="wrap">
+      <p class="eyebrow"><span class="no">07</span>확정 전 확인</p>
+      <h2 class="sec">호텔에 물어야 할 것</h2>
+      <div class="check reveal">
+        <h3>대관 문의 추가 항목</h3>
+        <ul>
+          <li><b>실제 치수와 기둥 유무.</b> 위 수치는 약 270㎡ 가정입니다. 기둥이 있으면 스탠딩 배치 밀도가 달라집니다.</li>
+          <li><b>칵테일 테이블 보유 수량과 대여료.</b> 22개를 자체 보유하는지, 별도 요금인지 — 잔여 예산이 빠듯해 <b>비용이 붙으면 즉시 예산 항목</b>이 됩니다.</li>
+          <li><b>파티션·화분 대여 가능 여부.</b> 구역 분리선을 무엇으로 세울지.</li>
+          <li><b>좌석 존 조도와 음향.</b> 스탠딩 소음이 상담을 덮지 않는지, 발표 시 마이크가 방 전체를 커버하는지.</li>
+          <li><b>스탠딩 기준 수용 인원.</b> 연회 150명 기준과 별개로, 스탠딩 배치의 소방·수용 상한을 확인.</li>
+        </ul>
+      </div>
+      <ul class="points reveal">
+        <li><b>후속 반영 사항.</b> 이 배치로 확정하면 세션 상세 문서의 회원사 교류 배치도와 네트워킹 시뮬레이션의 상담 건수(34건 → 90건 기준)를 함께 갱신해야 합니다.</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-in">
+      <span class="fb">AAIA 2026 · 2F 로얄볼룸 배치 설계</span>
+      <span>운영사무국(KMAC) · 2026. 8. 25.</span>
+      <span class="prov">DRAFT · 개념 평면도</span>
+    </div>
+    <p class="foot-note">평면도는 위에서 내려다본 개념도로, 실제 축척·기둥·출입구 위치와 다릅니다. 면적 270㎡, 칵테일 테이블 2.25㎡·연회 원탁 9㎡는 일반 기준을 적용한 추정값(안)이며, 스테이션 수와 처리량은 현장 확인 후 확정합니다.</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var els=document.querySelectorAll(".reveal");
+    if(reduce||!("IntersectionObserver" in window)){els.forEach(function(e){e.classList.add("in")});return;}
+    var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target);}})},{threshold:.12,rootMargin:"0px 0px -6% 0px"});
+    els.forEach(function(e){io.observe(e)});
+  })();
+</script>

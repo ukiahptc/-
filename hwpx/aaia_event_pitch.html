@@ -1,0 +1,506 @@
+<title>에이전트, 일을 시작했다</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;500;700;800;900&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --ground:#F4F6F9;
+    --surface:#FFFFFF;
+    --surface-2:#EEF1F6;
+    --ink:#14181F;
+    --ink-soft:#404A59;
+    --ink-faint:#6B7688;
+    --line:#DCE1EA;
+    --line-strong:#C3CBD8;
+    --cobalt:#2C55D4;
+    --cobalt-deep:#1E3D9E;
+    --cobalt-tint:#E7ECFB;
+    --amber:#C97E12;
+    --amber-bright:#E0A32E;
+    --amber-tint:#FBF0DA;
+    --ok:#1E7A56;
+    --shadow:12px 14px 40px rgba(20,24,31,.09);
+    --hero-grid:rgba(44,85,212,.09);
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --ground:#0E1116;
+      --surface:#161B23;
+      --surface-2:#1E242E;
+      --ink:#E8ECF3;
+      --ink-soft:#AEB8C7;
+      --ink-faint:#7C8799;
+      --line:#28303B;
+      --line-strong:#3A4452;
+      --cobalt:#6E90F5;
+      --cobalt-deep:#8AA6FF;
+      --cobalt-tint:#1A2438;
+      --amber:#E0A32E;
+      --amber-bright:#F0BC55;
+      --amber-tint:#2A2213;
+      --ok:#4FBF92;
+      --shadow:14px 16px 44px rgba(0,0,0,.42);
+      --hero-grid:rgba(110,144,245,.10);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0E1116;
+    --surface:#161B23;
+    --surface-2:#1E242E;
+    --ink:#E8ECF3;
+    --ink-soft:#AEB8C7;
+    --ink-faint:#7C8799;
+    --line:#28303B;
+    --line-strong:#3A4452;
+    --cobalt:#6E90F5;
+    --cobalt-deep:#8AA6FF;
+    --cobalt-tint:#1A2438;
+    --amber:#E0A32E;
+    --amber-bright:#F0BC55;
+    --amber-tint:#2A2213;
+    --ok:#4FBF92;
+    --shadow:14px 16px 44px rgba(0,0,0,.42);
+    --hero-grid:rgba(110,144,245,.10);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:"IBM Plex Sans KR","Gothic A1",system-ui,sans-serif;
+    font-weight:400;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  .mono{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-variant-numeric:tabular-nums}
+  .display{font-family:"Gothic A1","IBM Plex Sans KR",sans-serif}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px}
+  @media (max-width:640px){.wrap{padding:0 20px}}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:color-mix(in srgb, var(--ground) 84%, transparent);
+    backdrop-filter:saturate(1.4) blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-in{display:flex;align-items:center;gap:24px;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.01em;font-size:15px}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--cobalt);box-shadow:0 0 0 4px var(--cobalt-tint)}
+  .nav-links{margin-left:auto;display:flex;gap:26px}
+  .nav-links a{
+    font-size:13px;color:var(--ink-faint);text-decoration:none;font-weight:500;
+    padding:4px 0;border-bottom:2px solid transparent;transition:color .18s,border-color .18s;
+  }
+  .nav-links a:hover{color:var(--ink)}
+  .nav-links a:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px;border-radius:2px}
+  @media (max-width:760px){.nav-links{display:none}}
+
+  /* ---------- hero ---------- */
+  header.hero{
+    position:relative;overflow:hidden;
+    border-bottom:1px solid var(--line);
+    background:
+      linear-gradient(var(--hero-grid) 1px, transparent 1px) 0 0/100% 34px,
+      radial-gradient(120% 90% at 88% -10%, var(--cobalt-tint) 0%, transparent 55%);
+  }
+  .hero-in{padding:88px 0 76px;position:relative}
+  .kicker{
+    display:inline-flex;align-items:center;gap:10px;
+    font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--cobalt-deep);margin-bottom:26px;
+  }
+  .kicker .tick{width:26px;height:1px;background:var(--cobalt)}
+  h1.hero-title{
+    font-family:"Gothic A1",sans-serif;font-weight:900;
+    font-size:clamp(40px,7.2vw,80px);line-height:1.02;letter-spacing:-.03em;
+    margin:0;text-wrap:balance;
+  }
+  h1.hero-title .em{color:var(--cobalt);position:relative;white-space:nowrap}
+  h1.hero-title .em::after{
+    content:"";position:absolute;left:0;right:0;bottom:.06em;height:.13em;
+    background:var(--amber-bright);opacity:.9;z-index:-1;border-radius:2px;
+  }
+  .hero-sub{
+    margin:30px 0 0;max-width:56ch;font-size:clamp(16px,2vw,19px);
+    color:var(--ink-soft);line-height:1.75;
+  }
+  .hero-meta{
+    display:flex;flex-wrap:wrap;gap:10px 12px;margin-top:38px;
+  }
+  .chip{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--surface);border:1px solid var(--line);
+    border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:500;color:var(--ink-soft);
+  }
+  .chip b{color:var(--ink);font-weight:700}
+  .chip .mono{font-size:12.5px;color:var(--cobalt-deep)}
+
+  /* ---------- section scaffolding ---------- */
+  section{padding:76px 0;border-bottom:1px solid var(--line)}
+  .eyebrow{
+    display:flex;align-items:center;gap:12px;
+    font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-faint);margin:0 0 8px;
+  }
+  .eyebrow .no{
+    font-family:"IBM Plex Mono",monospace;color:var(--cobalt);
+    border:1px solid var(--line-strong);border-radius:5px;padding:1px 7px;font-size:11.5px;
+  }
+  h2.sec{
+    font-family:"Gothic A1",sans-serif;font-weight:800;letter-spacing:-.02em;
+    font-size:clamp(26px,3.6vw,38px);line-height:1.12;margin:0 0 14px;text-wrap:balance;
+  }
+  .sec-lead{max-width:60ch;color:var(--ink-soft);font-size:16px;margin:0 0 40px}
+
+  /* ---------- differentiation ---------- */
+  .gap-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media (max-width:760px){.gap-grid{grid-template-columns:1fr}}
+  .gapcard{
+    position:relative;background:var(--surface);border:1px solid var(--line);
+    border-radius:16px;padding:32px 30px;box-shadow:var(--shadow);overflow:hidden;
+  }
+  .gapcard::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--amber-bright);
+  }
+  .gapcard .gno{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--amber);
+    font-weight:600;letter-spacing:.1em;
+  }
+  .gapcard h3{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:21px;margin:10px 0 12px;letter-spacing:-.01em}
+  .gapcard p{margin:0;color:var(--ink-soft);font-size:15px}
+  .gap-note{
+    margin-top:26px;padding:20px 24px;border-radius:14px;
+    background:var(--cobalt-tint);border:1px solid color-mix(in srgb,var(--cobalt) 24%,transparent);
+    font-size:15px;color:var(--ink);
+  }
+  .gap-note b{color:var(--cobalt-deep)}
+
+  /* ---------- day flow ribbon ---------- */
+  .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;counter-reset:beat}
+  @media (max-width:760px){.flow{grid-template-columns:1fr 1fr}}
+  @media (max-width:460px){.flow{grid-template-columns:1fr}}
+  .beat{
+    position:relative;padding:26px 22px 30px;border:1px solid var(--line);
+    margin-left:-1px;margin-top:-1px;background:var(--surface);
+  }
+  .beat:hover{background:var(--surface-2)}
+  .beat .bn{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--cobalt);font-weight:600;
+  }
+  .beat h4{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:17px;margin:12px 0 8px;letter-spacing:-.01em}
+  .beat p{margin:0;font-size:13px;color:var(--ink-faint);line-height:1.6}
+  .beat .arrow{position:absolute;right:8px;top:26px;color:var(--line-strong);font-size:13px}
+
+  /* ---------- timeline ---------- */
+  .tl{position:relative;margin-top:8px}
+  .tl::before{
+    content:"";position:absolute;left:calc(88px + 8px);top:8px;bottom:8px;width:2px;
+    background:linear-gradient(var(--cobalt),var(--line));
+  }
+  @media (max-width:640px){.tl::before{left:9px}}
+  .slot{position:relative;display:grid;grid-template-columns:88px 1fr;gap:26px;padding:9px 0}
+  @media (max-width:640px){.slot{grid-template-columns:1fr;gap:6px;padding-left:34px}}
+  .slot .time{
+    font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-soft);
+    text-align:right;padding-top:2px;font-weight:500;
+  }
+  @media (max-width:640px){.slot .time{text-align:left}}
+  .slot .node{
+    position:absolute;left:calc(88px + 3px);top:8px;width:12px;height:12px;border-radius:50%;
+    background:var(--surface);border:2px solid var(--line-strong);
+  }
+  @media (max-width:640px){.slot .node{left:4px}}
+  .slot .what{font-size:15px;color:var(--ink);padding-bottom:2px}
+  .slot .what .tag{
+    font-size:11.5px;font-family:"IBM Plex Mono",monospace;color:var(--ink-faint);
+    margin-left:8px;
+  }
+  .slot.key .node{background:var(--cobalt);border-color:var(--cobalt);box-shadow:0 0 0 5px var(--cobalt-tint)}
+  .slot.key .what{font-weight:600}
+  .slot.hinge .node{background:var(--amber-bright);border-color:var(--amber-bright);box-shadow:0 0 0 5px var(--amber-tint)}
+  .slot.rest .time,.slot.rest .what{color:var(--ink-faint)}
+  .tl-legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:30px;font-size:12.5px;color:var(--ink-faint)}
+  .tl-legend span{display:inline-flex;align-items:center;gap:7px}
+  .tl-legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+  /* ---------- session cards ---------- */
+  .sess{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media (max-width:760px){.sess{grid-template-columns:1fr}}
+  .scard{
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:26px 26px 24px;display:flex;flex-direction:column;gap:0;transition:transform .18s,box-shadow .18s;
+  }
+  .scard:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .scard.span2{grid-column:1 / -1}
+  .scard .top{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+  .scard .id{
+    font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;
+    color:var(--cobalt);letter-spacing:.06em;border:1px solid var(--line-strong);
+    border-radius:5px;padding:2px 8px;white-space:nowrap;
+  }
+  .scard.flag .id{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 40%,var(--line))}
+  .scard h3{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:19px;margin:0;letter-spacing:-.01em;line-height:1.25}
+  .scard p{margin:0;color:var(--ink-soft);font-size:14.5px}
+  .scard .dur{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-faint)}
+
+  /* ---------- ops summary ---------- */
+  .ops{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  @media (max-width:860px){.ops{grid-template-columns:1fr 1fr}}
+  @media (max-width:460px){.ops{grid-template-columns:1fr}}
+  .op{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 22px;
+  }
+  .op .oh{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+  .op .oh .k{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:16px;letter-spacing:-.01em}
+  .op .oh .n{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-faint)}
+  .op .big{font-family:"Gothic A1",sans-serif;font-weight:900;font-size:30px;letter-spacing:-.02em;line-height:1;color:var(--cobalt)}
+  .op .big small{font-size:14px;font-weight:700;color:var(--ink-soft);margin-left:3px}
+  .op p{margin:12px 0 0;font-size:13px;color:var(--ink-faint);line-height:1.6}
+
+  /* ---------- risk ---------- */
+  .risk{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:760px){.risk{grid-template-columns:1fr}}
+  .rk{display:flex;gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .rk .when{
+    flex:0 0 auto;font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;
+    color:var(--amber);align-self:flex-start;background:var(--amber-tint);
+    border-radius:6px;padding:4px 9px;white-space:nowrap;
+  }
+  .rk h4{font-size:15px;margin:0 0 4px;font-weight:700}
+  .rk p{margin:0;font-size:13.5px;color:var(--ink-soft)}
+
+  .pill-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:28px}
+  .pill{
+    font-size:13px;color:var(--ink-soft);background:var(--surface-2);
+    border:1px solid var(--line);border-radius:999px;padding:7px 14px;
+  }
+  .pill b{color:var(--ink)}
+
+  /* ---------- footer ---------- */
+  footer{padding:52px 0 64px;color:var(--ink-faint);font-size:13px}
+  .foot-in{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:center}
+  .foot-in .fbrand{font-family:"Gothic A1",sans-serif;font-weight:800;color:var(--ink);font-size:15px}
+  .foot-note{margin-top:14px;font-size:12px;color:var(--ink-faint);max-width:60ch;line-height:1.6}
+  .provisional{
+    display:inline-block;font-size:11px;font-family:"IBM Plex Mono",monospace;
+    color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 34%,var(--line));
+    border-radius:5px;padding:1px 7px;
+  }
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+
+<nav>
+  <div class="wrap nav-in">
+    <div class="brand"><span class="dot"></span>AAIA 2026</div>
+    <div class="nav-links">
+      <a href="#why">기획 방향</a>
+      <a href="#flow">하루 흐름</a>
+      <a href="#timeline">타임테이블</a>
+      <a href="#sessions">세션</a>
+      <a href="#ops">운영 개요</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-in">
+    <div class="kicker"><span class="tick"></span>2026 대한민국 에이전틱 AI 현황</div>
+    <h1 class="hero-title">에이전트,<br>이제 <span class="em">일을 시작</span>했다</h1>
+    <p class="hero-sub">성과공유회가 아니라 컨퍼런스입니다. 성공 사례만 모으는 자리 대신, <b>도입 현장에서 안 된 이야기</b>와 결제·데이터·신원 같은 공동 기반의 합의를 정면으로 다룹니다.</p>
+    <div class="hero-meta">
+      <span class="chip"><span class="mono">12.09 WED</span> <b>2026. 12. 9.(수)</b></span>
+      <span class="chip">로얄호텔 서울 · <b>메인홀 + 부속홀</b></span>
+      <span class="chip">참석 <b>200명+</b></span>
+      <span class="chip">주최 <b>과기정통부 · NIA</b></span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="why">
+    <div class="wrap">
+      <p class="eyebrow"><span class="no">01</span>기획 방향</p>
+      <h2 class="sec">다른 AI 행사가 비워둔 두 자리</h2>
+      <p class="sec-lead">대형 AI 행사는 초청·후원 기반이라 솔루션 공급기업의 성공 사례에 편중됩니다. 후원 없이 도입 검토 기업이 다수인 얼라이언스만 설 수 있는 자리가 여기 있습니다.</p>
+      <div class="gap-grid">
+        <div class="gapcard reveal">
+          <span class="gno">GAP 01</span>
+          <h3>실패와 병목의 공개</h3>
+          <p>도입 과정에서 실제로 막힌 지점을 익명 사례와 기업 증언으로 무대에 올립니다. 어디서도 듣기 어려운 이야기가 참석 이유가 됩니다.</p>
+        </div>
+        <div class="gapcard reveal">
+          <span class="gno">GAP 02</span>
+          <h3>공동 기반의 합의</h3>
+          <p>결제·데이터·신원 등 에이전트 생태계의 공동 기반을 두고 산업계가 함께 방향을 맞추는 논의를 엽니다.</p>
+        </div>
+      </div>
+      <div class="gap-note reveal">주제 축 <b>「에이전트, 이제 일을 시작했다」</b> — 문제 제기 · 사례 · 진단 · 다음 단계 · 교류의 5단으로 하루를 설계합니다. 전반부에 막힌 지점을 올리고, 후반부에 대응 방향과 산출물을 내놓습니다.</div>
+    </div>
+  </section>
+
+  <section id="flow">
+    <div class="wrap">
+      <p class="eyebrow"><span class="no">02</span>하루 흐름</p>
+      <h2 class="sec">문제에서 교류까지, 다섯 박자</h2>
+      <div class="flow">
+        <div class="beat reveal"><div class="bn">BEAT 1</div><h4>문제 제기</h4><p>기조강연으로 연말 업계 흐름과 오늘의 질문을 세운다<span class="arrow">→</span></p></div>
+        <div class="beat reveal"><div class="bn">BEAT 2</div><h4>사례</h4><p>안 된 이야기와 데이터 기반 사업화 사례<span class="arrow">→</span></p></div>
+        <div class="beat reveal"><div class="bn">BEAT 3</div><h4>진단</h4><p>2026 에이전틱 AI 현황을 단일 보고로 통합<span class="arrow">→</span></p></div>
+        <div class="beat reveal"><div class="bn">BEAT 4</div><h4>다음 단계</h4><p>4개 분과 좌담 — 2027년 먼저 풀 것<span class="arrow">→</span></p></div>
+        <div class="beat reveal"><div class="bn">BEAT 5</div><h4>교류</h4><p>회원사 소개 발표와 배정형 상담</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <div class="wrap">
+      <p class="eyebrow"><span class="no">03</span>타임테이블</p>
+      <h2 class="sec">단일 트랙, 12:30 – 19:40</h2>
+      <p class="sec-lead">병행 없이 한 줄기로 갑니다. 200명 규모의 현장 밀도를 지키고, 회원사 한정 프로그램만 후반부 2층으로 분리합니다. 세션 1·2에 질의 10분, 좌담 말미에 플로어 질의 15분.</p>
+      <div class="tl">
+        <div class="slot"><div class="time">12:30</div><div class="node"></div><div class="what">등록 및 사전 교류<span class="tag">30′ · VIP 포토세션 병행</span></div></div>
+        <div class="slot key"><div class="time">13:00</div><div class="node"></div><div class="what">개회 · 주최기관 인사말 및 내빈 소개<span class="tag">20′</span></div></div>
+        <div class="slot key"><div class="time">13:20</div><div class="node"></div><div class="what">기조강연<span class="tag">40′</span></div></div>
+        <div class="slot hinge"><div class="time">14:00</div><div class="node"></div><div class="what">세션 1 · 안 된 이야기<span class="tag">40′ · 질의 포함</span></div></div>
+        <div class="slot rest"><div class="time">14:40</div><div class="node"></div><div class="what">휴식 및 교류<span class="tag">20′</span></div></div>
+        <div class="slot key"><div class="time">15:00</div><div class="node"></div><div class="what">세션 2 · 데이터 기반 사업화 사례<span class="tag">40′ · 질의 포함</span></div></div>
+        <div class="slot"><div class="time">15:40</div><div class="node"></div><div class="what">2026 에이전틱 AI 현황 발표<span class="tag">15′</span></div></div>
+        <div class="slot rest"><div class="time">15:55</div><div class="node"></div><div class="what">휴식<span class="tag">10′</span></div></div>
+        <div class="slot key"><div class="time">16:05</div><div class="node"></div><div class="what">세션 3 · 4개 분과 좌담<span class="tag">90′ · 플로어 질의 포함</span></div></div>
+        <div class="slot"><div class="time">17:35</div><div class="node"></div><div class="what">신규 회원사 소개 및 인증패 수여<span class="tag">15′</span></div></div>
+        <div class="slot rest"><div class="time">17:50</div><div class="node"></div><div class="what">회의장 이동 · 3층 → 2층<span class="tag">15′</span></div></div>
+        <div class="slot key"><div class="time">18:05</div><div class="node"></div><div class="what">회원사 소개 발표<span class="tag">40′ · 6개사</span></div></div>
+        <div class="slot key"><div class="time">18:45</div><div class="node"></div><div class="what">회원사 상담<span class="tag">55′ · 3회전</span></div></div>
+        <div class="slot"><div class="time">19:40</div><div class="node"></div><div class="what">자유 교류 및 해산</div></div>
+      </div>
+      <div class="tl-legend">
+        <span><i style="background:var(--cobalt)"></i>주요 프로그램</span>
+        <span><i style="background:var(--amber-bright)"></i>차별화 축 · 안 된 이야기</span>
+        <span><i style="background:var(--line-strong)"></i>휴식 · 전환</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="sessions">
+    <div class="wrap">
+      <p class="eyebrow"><span class="no">04</span>세션 컨셉</p>
+      <h2 class="sec">여섯 개의 무대</h2>
+      <div class="sess">
+        <div class="scard reveal">
+          <div class="top"><span class="id">KEYNOTE</span><span class="dur">40′</span></div>
+          <h3>기조강연</h3>
+          <p>연말 시점의 업계 흐름을 조망. 후보 김지현(SK경영경제연구소) — 중소기업 중심 참석자에 맞는 수익화·사업성 관점.</p>
+        </div>
+        <div class="scard flag reveal">
+          <div class="top"><span class="id">SESSION 1</span><span class="dur">40′</span></div>
+          <h3>안 된 이야기</h3>
+          <p>막힌 지점을 익명 사례 발표 + 기업 증언 2층위로 공개. 타 행사에 없는 참석 유인이자, 좌담의 논의 대상을 미리 확정하는 장치.</p>
+        </div>
+        <div class="scard reveal">
+          <div class="top"><span class="id">SESSION 2</span><span class="dur">40′</span></div>
+          <h3>데이터 기반 사업화 사례</h3>
+          <p>가칭 「에이전트에게 무엇을 팔 것인가」 — NIA 관광 데이터 사업 연계. 데이터·결제 계층 중 데이터 층위를 다뤄 생태계분과 논의로 연결.</p>
+        </div>
+        <div class="scard reveal">
+          <div class="top"><span class="id">BRIEFING</span><span class="dur">15′</span></div>
+          <h3>2026 에이전틱 AI 현황</h3>
+          <p>생태계 지도 · 도입 사례집 · 벤치마크를 NIA가 단일 보고로 통합 공개. 분과별 발표 분산을 방지.</p>
+        </div>
+        <div class="scard flag span2 reveal">
+          <div class="top"><span class="id">SESSION 3</span><span class="dur">90′</span></div>
+          <h3>4개 분과 좌담 — 「2027년, 무엇을 먼저 풀어야 하는가」</h3>
+          <p>좌장 1명과 분과 대표사 4개사의 좌담. 순차 발표가 아니라, 분과 간 견해 차이를 무대에서 드러내는 것이 핵심. 기술·산업의 실증 병목과 생태계·안전신뢰의 기반 정비를 나란히 놓는다.</p>
+        </div>
+        <div class="scard span2 reveal">
+          <div class="top"><span class="id">2F · 회원사</span><span class="dur">40′ + 55′</span></div>
+          <h3>회원사 교류 — 소개 발표 6개사 + 배정형 상담 3회전</h3>
+          <p>등록 시 수집한 수요로 사무국이 상담을 사전 배정 → 상담 건수가 성과 지표로 직결. 회원사 한정 구간이라 가입 유인 역할을 겸한다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ops">
+    <div class="wrap">
+      <p class="eyebrow"><span class="no">05</span>운영 개요</p>
+      <h2 class="sec">숫자로 보는 준비 상태</h2>
+      <p class="sec-lead">아래 수치는 논의용 초안(안)이며, 세부 실행 계획은 별도 붙임으로 관리합니다.</p>
+      <div class="ops">
+        <div class="op reveal">
+          <div class="oh"><span class="k">모객</span><span class="n">TARGET</span></div>
+          <div class="big">300<small>건</small></div>
+          <p>노쇼 30~40% 감안 참석 200명 목표. 회원사·주최기관·유관기관·연사 4개 채널로 역산.</p>
+        </div>
+        <div class="op reveal">
+          <div class="oh"><span class="k">예산</span><span class="n">VENUE</span></div>
+          <div class="big">1,100<small>만원</small></div>
+          <p>두 홀 오후 대관 기준. 부대비용 550~950만원 추정 — 오후 편성은 성립, 종일은 불가.</p>
+        </div>
+        <div class="op reveal">
+          <div class="oh"><span class="k">일정</span><span class="n">RUNWAY</span></div>
+          <div class="big">4~5<small>주</small></div>
+          <p>11.3. 등록 개시 → 12.4. 마감. 9월 말 증언 기업 확보, 8월 말 대관 가계약.</p>
+        </div>
+        <div class="op reveal">
+          <div class="oh"><span class="k">상담</span><span class="n">GOAL</span></div>
+          <div class="big">30<small>건+</small></div>
+          <p>사전 신청 → 배정 → 진행 → 후속 연결의 단계별 집계. 배정 구조라 수치 확보 가능.</p>
+        </div>
+      </div>
+
+      <p class="eyebrow" style="margin-top:52px"><span class="no">06</span>리스크 · 판단 시점</p>
+      <h2 class="sec">최대 리스크는 종일·반일이 아니다</h2>
+      <p class="sec-lead">진짜 리스크는 <b>모객</b>과 <b>세션 1 증언 기업 섭외</b>입니다. 이 둘이 무너지면 편성 논의는 의미가 없어, 판단 시점과 대응 경로를 먼저 정의합니다.</p>
+      <div class="risk">
+        <div class="rk reveal"><span class="when">11월 말</span><div><h4>모객 미달</h4><p>등록 150건 미달 시 회원사 1사 2인 재요청, 주최기관 채널 재발송.</p></div></div>
+        <div class="rk reveal"><span class="when">9월 말</span><div><h4>증언 기업 미확보</h4><p>익명 패널(사회자 대독·소속 비공개) 전환, 최종 불가 시 사례 발표로 축소.</p></div></div>
+        <div class="rk reveal"><span class="when">수시</span><div><h4>기조강연자 취소</h4><p>대체 후보 2인 사전 확보, 불가 시 현황 발표 확대 + 좌담 연장.</p></div></div>
+        <div class="rk reveal"><span class="when">8월 말</span><div><h4>상담 테이블 부족</h4><p>원탁 배치 테이블 12개 미만 시 회전수 확대 또는 스탠딩 상담석 병행.</p></div></div>
+      </div>
+      <div class="pill-row">
+        <span class="pill"><b>미확정</b> 식사·종일 편성</span>
+        <span class="pill">유·무료 방침</span>
+        <span class="pill">좌담 좌장 선정</span>
+        <span class="pill">인증패 선정·제작 주체</span>
+        <span class="pill">주최기관 의전 분담</span>
+        <span class="pill">행사 명칭</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-in">
+      <span class="fbrand">AAIA 2026 연말 행사 기획(안)</span>
+      <span>운영사무국(KMAC) · 2026. 8. 25.</span>
+      <span class="provisional">DRAFT v3 · 구조·컨텐츠 논의안</span>
+    </div>
+    <p class="foot-note">본 소개자료는 팀 논의용 초안입니다. 수치와 편성은 확정 전 가정값(안)이며, 모객·추진 일정·예산·리스크의 세부 실행 계획은 기획안 붙임으로 관리합니다.</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var els = document.querySelectorAll(".reveal");
+    if(reduce || !("IntersectionObserver" in window)){
+      els.forEach(function(e){e.classList.add("in")});
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target);}
+      });
+    },{threshold:.14,rootMargin:"0px 0px -8% 0px"});
+    els.forEach(function(e){io.observe(e)});
+  })();
+</script>

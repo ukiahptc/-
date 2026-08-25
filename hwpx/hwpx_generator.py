@@ -639,10 +639,11 @@ def build_section_xml(cfg, fills, items):
                         'sameSz="1" sameGap="0"/></hp:ctrl>')
         if item["kind"] == "para":
             sidx = style_index(item["style"])
+            pb = 1 if item.get("page_break") else 0
             parts.append(
-                '<hp:p id="%d" paraPrIDRef="%d" styleIDRef="%d" pageBreak="0" columnBreak="0" merged="0">'
+                '<hp:p id="%d" paraPrIDRef="%d" styleIDRef="%d" pageBreak="%d" columnBreak="0" merged="0">'
                 '<hp:run charPrIDRef="%d">%s<hp:t>%s</hp:t></hp:run></hp:p>'
-                % (pid, sidx, sidx, sidx, prefix, escape(item["text"]))
+                % (pid, sidx, sidx, pb, sidx, prefix, escape(item["text"]))
             )
         else:
             if item["kind"] == "title_table":
@@ -789,8 +790,9 @@ def resolve_items(cfg, content_items, title=None, date_author=None):
                           "style": item.get("style", tpl["title_style"])})
             continue
         text = item.get("text", "")
-        for line in text.split("\n"):
-            items.append({"kind": "para", "style": item.get("style", 0), "text": line})
+        for j, line in enumerate(text.split("\n")):
+            items.append({"kind": "para", "style": item.get("style", 0), "text": line,
+                          "page_break": bool(item.get("page_break")) and j == 0})
     return items
 
 

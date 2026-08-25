@@ -1,0 +1,68 @@
+{
+  "title": "샘플 문서",
+  "page": {
+    "width_mm": 210,
+    "height_mm": 297,
+    "landscape": false,
+    "margins_mm": {
+      "top": 20,
+      "bottom": 15,
+      "left": 30,
+      "right": 30,
+      "header": 15,
+      "footer": 15,
+      "gutter": 0
+    }
+  },
+  "fonts": {
+    "hangul": "함초롬바탕",
+    "latin": "함초롬바탕"
+  },
+  "styles": [
+    {
+      "name": "본문",
+      "eng_name": "Normal",
+      "font_size_pt": 10,
+      "bold": false,
+      "italic": false,
+      "underline": false,
+      "color": "#000000",
+      "letter_spacing_percent": 0,
+      "align": "justify",
+      "line_spacing_percent": 160,
+      "space_before_pt": 0,
+      "space_after_pt": 0,
+      "indent_first_line_pt": 10,
+      "left_margin_pt": 0,
+      "right_margin_pt": 0
+    },
+    {
+      "name": "제목",
+      "eng_name": "Title",
+      "font_hangul": "함초롬돋움",
+      "font_latin": "함초롬돋움",
+      "font_size_pt": 16,
+      "bold": true,
+      "color": "#000000",
+      "align": "center",
+      "line_spacing_percent": 160,
+      "space_before_pt": 0,
+      "space_after_pt": 12,
+      "indent_first_line_pt": 0
+    },
+    {
+      "name": "소제목",
+      "eng_name": "Heading",
+      "font_hangul": "함초롬돋움",
+      "font_latin": "함초롬돋움",
+      "font_size_pt": 12,
+      "bold": true,
+      "color": "#1A1A1A",
+      "align": "left",
+      "line_spacing_percent": 160,
+      "space_before_pt": 10,
+      "space_after_pt": 4,
+      "indent_first_line_pt": 0
+    }
+  ]
+}

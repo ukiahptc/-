@@ -1,0 +1,7 @@
+[
+  { "style": "제목", "text": "HWPX 스타일 적용 샘플" },
+  { "style": "소제목", "text": "1. 개요" },
+  { "style": "본문", "text": "이 문서는 styles.example.json에 정의된 스타일 수치를 적용하여 hwpx_generator.py로 생성한 샘플입니다. 글꼴, 크기, 정렬, 줄간격, 문단 간격이 스타일별로 다르게 적용됩니다." },
+  { "style": "소제목", "text": "2. 사용 방법" },
+  { "style": "본문", "text": "styles.example.json의 수치를 원하는 값으로 바꾼 뒤 스크립트를 실행하면 됩니다. 내용은 content JSON에서 스타일 이름으로 지정합니다." }
+]

@@ -5,20 +5,71 @@
     "height_mm": 297,
     "landscape": false,
     "margins_mm": {
-      "top": 20,
-      "bottom": 15,
-      "left": 30,
-      "right": 30,
+      "top": 10,
+      "bottom": 10,
+      "left": 20,
+      "right": 20,
       "header": 15,
       "footer": 15,
       "gutter": 0
     }
+  },
+  "template": {
+    "title": "문서 제목을 입력하세요",
+    "title_style": "문서 제목",
+    "date_author": "[’26.8.25.(화), 작성자명]",
+    "date_author_style": "날짜/작성자",
+    "accent_start": "#3057B9",
+    "accent_end": "#DFE6F7"
+  },
+  "table": {
+    "header_style": "(표) 제목행",
+    "body_style": "(표) 내용 가운데",
+    "outer_border_mm": 0.3,
+    "inner_border_mm": 0.12
   },
   "fonts": {
     "hangul": "휴먼명조",
     "latin": "휴먼명조"
   },
   "styles": [
+    {
+      "name": "문서 제목",
+      "eng_name": "DocTitle",
+      "font_hangul": "HY헤드라인M",
+      "font_latin": "HY헤드라인M",
+      "font_size_pt": 18,
+      "align": "center",
+      "line_spacing_percent": 190,
+      "left_margin_pt": 0,
+      "right_margin_pt": 0,
+      "indent_first_line_pt": 0
+    },
+    {
+      "name": "날짜/작성자",
+      "eng_name": "DateAuthor",
+      "font_hangul": "휴먼명조",
+      "font_latin": "HCI Poppy",
+      "font_size_pt": 12,
+      "align": "right",
+      "line_spacing_percent": 110,
+      "left_margin_pt": 0,
+      "right_margin_pt": 0,
+      "indent_first_line_pt": 0
+    },
+    {
+      "name": "(표) 제목행",
+      "eng_name": "TableHeader",
+      "font_hangul": "맑은 고딕",
+      "font_latin": "맑은 고딕",
+      "font_size_pt": 11,
+      "bold": true,
+      "align": "center",
+      "line_spacing_percent": 130,
+      "left_margin_pt": 0,
+      "right_margin_pt": 0,
+      "indent_first_line_pt": 0
+    },
     {
       "name": "□",
       "eng_name": "Head1",

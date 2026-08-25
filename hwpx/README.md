@@ -50,16 +50,48 @@ python3 hwpx_generator.py --styles styles.example.json --text 내용.txt -o out.
 | `indent_first_line_pt` | pt | 첫 줄 들여쓰기(양수) / 내어쓰기(음수) |
 | `left_margin_pt`, `right_margin_pt` | pt | 문단 좌/우 여백 |
 
+### template — 문서 상단 기본 템플릿 (제목 표 + 작성날짜/작성자)
+
+설정하면 문서 맨 위에 파란 그라데이션 액센트 띠가 있는 제목 표와
+오른쪽 정렬된 작성날짜/작성자 줄이 자동으로 들어갑니다.
+
+| 항목 | 설명 |
+|---|---|
+| `title` | 제목 표 안의 텍스트 (CLI `--title`로 덮어쓰기 가능) |
+| `title_style` | 제목에 쓸 스타일 이름 (기본 "문서 제목") |
+| `date_author` | 작성날짜/작성자 줄 텍스트 (CLI `--date-author`로 덮어쓰기 가능) |
+| `date_author_style` | 그 줄에 쓸 스타일 이름 (기본 "날짜/작성자") |
+| `accent_start`, `accent_end` | 액센트 띠 그라데이션 색 (기본 #3057B9 → #DFE6F7) |
+
+### table — 표 서식 기본값
+
+행정문서형 개방형 표: 좌우 바깥 테두리 없음, 위/아래 0.3mm 굵은 선,
+내부선 0.12mm, 셀 세로 가운데 정렬.
+
+| 항목 | 설명 |
+|---|---|
+| `header_style` | 제목행 스타일 이름 (기본 "(표) 제목행") |
+| `body_style` | 내용 셀 스타일 이름 (기본 "(표) 내용 가운데") |
+| `outer_border_mm`, `inner_border_mm` | 바깥/내부 선 두께 |
+
 ## 내용 파일 형식 (content.json)
 
 ```json
 [
-  { "style": "제목", "text": "문서 제목" },
-  { "style": "본문", "text": "첫 문단.\n둘째 문단(줄바꿈은 문단 분리)." }
+  { "style": "□", "text": "추진 배경" },
+  { "style": "○", "text": "첫 문단.\n둘째 문단(줄바꿈은 문단 분리)." },
+  { "table": {
+      "columns": ["구분", "내용"],
+      "col_widths_percent": [33, 67],
+      "rows": [["기업명", "공식 사명"], ["도메인", "산업 분류"]]
+  } }
 ]
 ```
 
 `style`은 styles.json의 `name`(또는 0부터 시작하는 인덱스)입니다.
+표 항목은 `header_style`/`body_style`(열별 리스트 가능)을 개별 지정할 수
+있으며, `columns`를 생략하면 제목행 없는 표가 됩니다. 표 폭은 본문
+폭 전체를 쓰고 `col_widths_percent` 비율로 열을 나눕니다.
 
 ## 단위 참고
 

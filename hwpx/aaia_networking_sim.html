@@ -1,0 +1,400 @@
+<title>맵스테이의 90분</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --ground:#F4F6F9;--surface:#FFFFFF;--surface-2:#EEF1F6;
+    --ink:#14181F;--ink-soft:#404A59;--ink-faint:#6B7688;
+    --line:#DCE1EA;--line-strong:#C3CBD8;
+    --cobalt:#2C55D4;--cobalt-deep:#1E3D9E;--cobalt-tint:#E7ECFB;
+    --amber:#C97E12;--amber-bright:#E0A32E;--amber-tint:#FBF0DA;
+    --ok:#1E7A56;--ok-tint:#DBF0E6;--warn:#B4472B;--warn-tint:#F8E4DE;
+    --shadow:12px 14px 40px rgba(20,24,31,.09);
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme:dark){
+      --ground:#0E1116;--surface:#161B23;--surface-2:#1E242E;
+      --ink:#E8ECF3;--ink-soft:#AEB8C7;--ink-faint:#7C8799;
+      --line:#28303B;--line-strong:#3A4452;
+      --cobalt:#6E90F5;--cobalt-deep:#8AA6FF;--cobalt-tint:#1A2438;
+      --amber:#E0A32E;--amber-bright:#F0BC55;--amber-tint:#2A2213;
+      --ok:#4FBF92;--ok-tint:#132A20;--warn:#E48166;--warn-tint:#2C1712;
+      --shadow:14px 16px 44px rgba(0,0,0,.42);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0E1116;--surface:#161B23;--surface-2:#1E242E;
+    --ink:#E8ECF3;--ink-soft:#AEB8C7;--ink-faint:#7C8799;
+    --line:#28303B;--line-strong:#3A4452;
+    --cobalt:#6E90F5;--cobalt-deep:#8AA6FF;--cobalt-tint:#1A2438;
+    --amber:#E0A32E;--amber-bright:#F0BC55;--amber-tint:#2A2213;
+    --ok:#4FBF92;--ok-tint:#132A20;--warn:#E48166;--warn-tint:#2C1712;
+    --shadow:14px 16px 44px rgba(0,0,0,.42);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--ground);color:var(--ink);
+    font-family:"IBM Plex Sans KR","Gothic A1",system-ui,sans-serif;line-height:1.72;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .mono{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-variant-numeric:tabular-nums}
+  .wrap{max-width:940px;margin:0 auto;padding:0 32px}
+  @media (max-width:640px){.wrap{padding:0 20px}}
+
+  /* hero */
+  header.hero{border-bottom:1px solid var(--line);overflow:hidden;
+    background:radial-gradient(120% 100% at 12% -10%, var(--amber-tint) 0%, transparent 52%),
+               radial-gradient(120% 100% at 92% 0%, var(--cobalt-tint) 0%, transparent 55%)}
+  .hero-in{padding:60px 0 48px}
+  .kick{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cobalt-deep);font-weight:600;margin-bottom:18px}
+  h1{font-family:"Gothic A1",sans-serif;font-weight:900;font-size:clamp(34px,6vw,62px);line-height:1.03;letter-spacing:-.03em;margin:0;text-wrap:balance}
+  .hero-sub{margin:20px 0 0;max-width:56ch;color:var(--ink-soft);font-size:16.5px}
+
+  /* badge / lanyard */
+  .badge{margin-top:34px;max-width:440px;background:var(--surface);border:1px solid var(--line);
+    border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+  .badge .strip{height:8px;background:linear-gradient(90deg,var(--amber-bright),var(--amber))}
+  .badge .b-in{padding:20px 22px}
+  .badge .b-top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .badge .purpose{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--amber);
+    background:var(--amber-tint);border-radius:999px;padding:3px 10px;letter-spacing:.03em}
+  .badge .sim{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-faint);border:1px solid var(--line);border-radius:5px;padding:2px 7px}
+  .badge .name{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:24px;letter-spacing:-.01em;margin:6px 0 2px}
+  .badge .org{color:var(--ink-soft);font-size:14px}
+  .badge .b-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line);margin-top:16px}
+  .badge .b-cell{padding:12px 22px}
+  .badge .b-cell:first-child{border-right:1px solid var(--line)}
+  .badge .b-cell .k{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:600}
+  .badge .b-cell .v{font-size:13px;color:var(--ink);margin-top:3px}
+
+  /* sim params */
+  .params{background:var(--surface-2);border-bottom:1px solid var(--line)}
+  .params-in{padding:16px 0;display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;font-size:12.5px;color:var(--ink-faint)}
+  .params-in b{color:var(--ink-soft);font-weight:600}
+  .params-in .tag{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--cobalt-deep);background:var(--cobalt-tint);border-radius:5px;padding:2px 8px}
+
+  /* act */
+  .act{padding:60px 0;border-bottom:1px solid var(--line)}
+  .act-label{display:flex;align-items:center;gap:12px;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 8px}
+  .act-label .step{color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 40%,var(--line));border-radius:5px;padding:1px 8px;font-weight:600}
+  .act h2{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:clamp(24px,3.4vw,34px);letter-spacing:-.02em;margin:0 0 10px;line-height:1.14;text-wrap:balance}
+  .act .lead{max-width:62ch;color:var(--ink-soft);font-size:15.5px;margin:0 0 32px}
+
+  /* form answers */
+  .qa{display:flex;flex-direction:column;gap:14px}
+  .qa .row{display:grid;grid-template-columns:200px 1fr;gap:18px;padding:16px 0;border-bottom:1px solid var(--line)}
+  @media (max-width:640px){.qa .row{grid-template-columns:1fr;gap:6px}}
+  .qa .q{font-weight:600;font-size:13.5px;color:var(--ink)}
+  .qa .q .num{font-family:"IBM Plex Mono",monospace;color:var(--cobalt);font-size:12px;margin-right:8px}
+  .qa .a{color:var(--ink-soft);font-size:14.5px}
+  .qa .a .chip{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:11.5px;background:var(--amber-tint);color:var(--amber);border-radius:6px;padding:2px 9px;margin-top:2px}
+
+  /* assignment sheet */
+  .sheet{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+  .sheet-h{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;background:var(--surface-2)}
+  .sheet-h .doc{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-faint)}
+  .sheet-h .title{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:16px}
+  .sheet-h .to{margin-left:auto;font-size:12.5px;color:var(--ink-soft)}
+  .assign{display:flex;flex-direction:column}
+  .assign .a-row{display:grid;grid-template-columns:70px 1fr auto;gap:16px;align-items:center;padding:16px 24px;border-bottom:1px solid var(--line)}
+  .assign .a-row:last-child{border-bottom:0}
+  @media (max-width:640px){.assign .a-row{grid-template-columns:56px 1fr;gap:10px}.assign .a-row .m{grid-column:1 / -1}}
+  .assign .rnd{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--cobalt-deep);font-weight:600}
+  .assign .rnd small{display:block;color:var(--ink-faint);font-weight:400;font-size:10.5px;margin-top:2px}
+  .assign .co{font-weight:700;font-size:15px}
+  .assign .co small{display:block;font-weight:400;color:var(--ink-faint);font-size:12.5px;margin-top:2px}
+
+  /* match meter */
+  .meter{display:flex;align-items:center;gap:9px;white-space:nowrap}
+  .meter .track{width:78px;height:7px;border-radius:4px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+  .meter .fill{height:100%;border-radius:4px}
+  .meter .lab{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-faint)}
+  .m-hi .fill{background:var(--amber-bright);width:88%}
+  .m-mid .fill{background:var(--cobalt);width:56%}
+  .m-lo .fill{background:var(--line-strong);width:28%}
+
+  /* timeline of the night */
+  .story{display:flex;flex-direction:column;gap:0;position:relative}
+  .beat{position:relative;padding:0 0 6px 34px}
+  .beat::before{content:"";position:absolute;left:9px;top:26px;bottom:-6px;width:2px;background:var(--line)}
+  .beat:last-child::before{display:none}
+  .beat .dot{position:absolute;left:2px;top:6px;width:16px;height:16px;border-radius:50%;background:var(--surface);border:3px solid var(--line-strong)}
+  .beat.key .dot{border-color:var(--cobalt);background:var(--cobalt)}
+  .beat.win .dot{border-color:var(--ok);background:var(--ok)}
+  .beat.warn .dot{border-color:var(--warn);background:var(--warn)}
+  .beat .time{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--cobalt-deep);font-weight:600}
+  .beat h3{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:18px;margin:3px 0 0;letter-spacing:-.01em}
+  .beat .body{margin:8px 0 26px;color:var(--ink-soft);font-size:14.5px}
+  .beat .body p{margin:0 0 9px}
+  .beat .body p:last-child{margin-bottom:0}
+  .beat .quote{border-left:3px solid var(--amber-bright);padding:4px 0 4px 14px;color:var(--ink);font-size:14.5px;margin:12px 0}
+
+  /* round card inside story */
+  .rcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:12px 0 0;box-shadow:var(--shadow)}
+  .rcard .rc-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .rcard .rc-co{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:16px}
+  .rcard .rc-tag{font-family:"IBM Plex Mono",monospace;font-size:10.5px;border-radius:999px;padding:2px 9px;font-weight:600}
+  .rc-tag.assigned{color:var(--cobalt-deep);background:var(--cobalt-tint)}
+  .rc-tag.swap{color:var(--warn);background:var(--warn-tint)}
+  .rc-tag.walkin{color:var(--ok);background:var(--ok-tint)}
+  .rcard .rc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;font-size:13px;margin:10px 0 12px}
+  @media (max-width:520px){.rcard .rc-grid{grid-template-columns:1fr}}
+  .rcard .rc-grid .k{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);font-weight:600}
+  .rcard .rc-grid .v{color:var(--ink-soft);margin-top:1px}
+  .rcard .rc-out{display:flex;align-items:center;gap:9px;font-size:13.5px;padding-top:12px;border-top:1px solid var(--line)}
+  .rcard .rc-out .badge2{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;border-radius:5px;padding:2px 8px}
+  .badge2.next{color:var(--ok);background:var(--ok-tint)}
+  .badge2.hold{color:var(--ink-faint);background:var(--surface-2)}
+
+  /* outcome / scoreboard */
+  .score{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:6px}
+  @media (max-width:720px){.score{grid-template-columns:1fr 1fr}}
+  .sc{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 20px;text-align:left}
+  .sc .n{font-family:"Gothic A1",sans-serif;font-weight:900;font-size:34px;letter-spacing:-.02em;line-height:1;color:var(--cobalt)}
+  .sc .n small{font-size:15px;font-weight:700;color:var(--ink-soft);margin-left:3px}
+  .sc .k{margin-top:8px;font-size:13px;color:var(--ink-faint)}
+  .sc.amber .n{color:var(--amber)}
+
+  .resolved{list-style:none;margin:30px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:720px){.resolved{grid-template-columns:1fr}}
+  .resolved li{display:flex;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .resolved .ic{flex:0 0 auto;width:26px;height:26px;border-radius:8px;background:var(--ok-tint);color:var(--ok);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+  .resolved h4{margin:0 0 3px;font-size:14px;font-weight:700}
+  .resolved p{margin:0;font-size:13px;color:var(--ink-soft)}
+
+  footer{padding:44px 0 60px;color:var(--ink-faint);font-size:13px}
+  .foot-in{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center}
+  .foot-in .fb{font-family:"Gothic A1",sans-serif;font-weight:800;color:var(--ink);font-size:15px}
+  .prov{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 34%,var(--line));border-radius:5px;padding:1px 7px}
+  .foot-note{margin-top:12px;font-size:12px;max-width:66ch;line-height:1.6}
+
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+
+<header class="hero">
+  <div class="wrap hero-in">
+    <div class="kick">AAIA 2026 · NETWORKING SIMULATION</div>
+    <h1>맵스테이의 90분</h1>
+    <p class="hero-sub">사전 신청한 회원사 한 곳의 눈으로 네트워킹 프로그램을 처음부터 끝까지 따라가 본 시뮬레이션입니다. 등록에서 후속 연결까지, 배정 매칭이 실제로 어떻게 굴러가는지 확인합니다.</p>
+    <div class="badge reveal">
+      <div class="strip"></div>
+      <div class="b-in">
+        <div class="b-top">
+          <span class="purpose">● 협업·실증 희망</span>
+          <span class="sim">가상 페르소나</span>
+        </div>
+        <div class="name">서지원 · 사업개발팀장</div>
+        <div class="org">㈜맵스테이(MAPSTAY) — 관광·여행 도메인 데이터, 종업원 40명</div>
+      </div>
+      <div class="b-grid">
+        <div class="b-cell"><div class="k">제공 가능</div><div class="v">관광 데이터 정제·구조화 파이프라인, 지역 POI 데이터셋</div></div>
+        <div class="b-cell"><div class="k">찾는 것</div><div class="v">데이터를 소비할 도메인 에이전트 실증 파트너, 결제·정산 연동</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="params">
+  <div class="wrap params-in">
+    <span class="tag">SIM</span>
+    <span><b>모델 조건</b> 상담 신청 34건 · 원탁 14개 · 3회전(회전당 15′) · 현장석 10% 유보</span>
+    <span><b>가정</b> 노쇼율 약 12% · 사전 배정 우선, 잔여는 현장 흡수</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- ACT 1 -->
+  <section class="act">
+    <div class="wrap">
+      <p class="act-label"><span class="step">ACT 1</span> 11월 초 · 등록</p>
+      <h2>등록 양식이 명찰 색과 상담 수요를 동시에 결정한다</h2>
+      <p class="lead">서지원 팀장은 등록하면서 수요 문항 4개에 답합니다. 이 답이 곧 명찰 색(협업·실증 = 앰버)과 사무국의 상담 조합 편성 근거가 됩니다.</p>
+      <div class="qa reveal">
+        <div class="row"><div class="q"><span class="num">Q1</span>참여 목적</div><div class="a">협업·실증 파트너를 찾고 싶다 <span class="chip">→ 명찰 앰버</span></div></div>
+        <div class="row"><div class="q"><span class="num">Q2</span>제공 가능한 사항</div><div class="a">관광 데이터 정제 파이프라인, 지역 POI 데이터셋, 데이터 품질 검증 노하우</div></div>
+        <div class="row"><div class="q"><span class="num">Q3</span>필요한 사항</div><div class="a">우리 데이터를 쓸 여행·커머스 도메인 에이전트, 결제·정산 연동 레퍼런스</div></div>
+        <div class="row"><div class="q"><span class="num">Q4</span>희망 상대 유형</div><div class="a">여행/커머스 에이전트 스타트업, 결제 인프라 기업 · <span class="mono" style="color:var(--ink-faint)">개인정보 제3자 제공 동의 ✓</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT 2 -->
+  <section class="act">
+    <div class="wrap">
+      <p class="act-label"><span class="step">ACT 2</span> 11월 말 · 배정 통보</p>
+      <h2>행사 2주 전, 3회전 상담 조합이 메일로 도착한다</h2>
+      <p class="lead">사무국이 34건의 수요를 수동 편성해 개별 통보합니다. 서지원 팀장은 누구와 언제 앉을지, 왜 매칭됐는지를 미리 알고 옵니다 — 자유 교류의 최대 장애인 ‘대화 상대 선정 곤란’이 여기서 사라집니다.</p>
+      <div class="sheet reveal">
+        <div class="sheet-h">
+          <span class="doc">CONSULT-ASSIGN · v1</span>
+          <span class="title">상담 배정표</span>
+          <span class="to">수신: ㈜맵스테이 서지원</span>
+        </div>
+        <div class="assign">
+          <div class="a-row">
+            <div class="rnd">R1<small>18:45</small></div>
+            <div class="co">㈜트립에이전트 <small>여행 플래닝 에이전트 · 데이터 수요 강함</small></div>
+            <div class="m meter m-hi"><span class="track"><span class="fill"></span></span><span class="lab">매치 강</span></div>
+          </div>
+          <div class="a-row">
+            <div class="rnd">R2<small>19:05</small></div>
+            <div class="co">㈜페이브릿지 <small>결제·정산 인프라 · 정산 연동 관심</small></div>
+            <div class="m meter m-mid"><span class="track"><span class="fill"></span></span><span class="lab">매치 중</span></div>
+          </div>
+          <div class="a-row">
+            <div class="rnd">R3<small>19:25</small></div>
+            <div class="co">㈜핀레일 <small>여행 커머스 정산 · 데이터×결제 교차</small></div>
+            <div class="m meter m-mid"><span class="track"><span class="fill"></span></span><span class="lab">매치 중</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT 3 -->
+  <section class="act">
+    <div class="wrap">
+      <p class="act-label"><span class="step">ACT 3</span> 12. 9. 저녁 · 2층 로얄볼룸</p>
+      <h2>18:05 ~ 19:40, 안에서 본 90분</h2>
+      <p class="lead">메인홀 프로그램이 끝나고 2층으로 올라옵니다. 원탁은 이미 세팅돼 있고, 소개 발표부터 상담 3회전, 자유 교류까지 전환 없이 이어집니다.</p>
+      <div class="story">
+
+        <div class="beat key reveal">
+          <span class="dot"></span>
+          <div class="time">18:05 · 소개 발표</div>
+          <h3>6개사 발표를 들으며 표적을 좁힌다</h3>
+          <div class="body">
+            <p>발표 순서와 기업 정보는 이미 공개돼 있었다. 서지원 팀장은 배정된 3개사 외에, 발표 중인 ㈜웨이포인트(여행 큐레이션 에이전트)를 눈여겨본다 — 배정표엔 없지만 데이터 수요가 분명해 보인다.</p>
+            <p class="quote">“R1~R3는 이미 정해졌고, 남는 회전이나 자유 교류에서 웨이포인트를 잡아야겠다.” — 발표를 들으며 미리 계획을 세운다.</p>
+          </div>
+        </div>
+
+        <div class="beat win reveal">
+          <span class="dot"></span>
+          <div class="time">18:45 · 상담 1회전</div>
+          <h3>가장 강한 매치부터</h3>
+          <div class="rcard">
+            <div class="rc-top"><span class="rc-co">㈜트립에이전트</span><span class="rc-tag assigned">사전 배정</span><span class="meter m-hi" style="margin-left:auto"><span class="track"><span class="fill"></span></span><span class="lab">매치 강</span></span></div>
+            <div class="rc-grid">
+              <div><div class="k">상대가 찾는 것</div><div class="v">여행 도메인 정제 데이터, POI 최신성</div></div>
+              <div><div class="k">맵스테이가 줄 수 있는 것</div><div class="v">POI 데이터셋 + 품질 검증 파이프라인</div></div>
+            </div>
+            <div class="rc-out"><span class="badge2 next">다음 단계</span> 실증 파일럿(2개월) 논의, 12월 셋째 주 화상 미팅 합의. 명함 + 데이터 샘플 공유 약속.</div>
+          </div>
+          <div class="body" style="margin-top:14px"><p>15분이 짧게 느껴진다. 전환 벨이 울리고, 상대 회사가 옆 테이블로 이동한다.</p></div>
+        </div>
+
+        <div class="beat warn reveal">
+          <span class="dot"></span>
+          <div class="time">19:05 · 상담 2회전</div>
+          <h3>배정 상대가 안 왔다 — 그리고 현장 배정이 메운다</h3>
+          <div class="body">
+            <p>R2 상대 ㈜페이브릿지가 자리에 없다. 교통 문제로 노쇼. 테이블 안내 스태프가 유보석에서 대기 중이던 <b>㈜커머스브레인</b>(리테일 에이전트)을 즉시 안내한다.</p>
+          </div>
+          <div class="rcard">
+            <div class="rc-top"><span class="rc-co">㈜커머스브레인</span><span class="rc-tag swap">노쇼 → 현장 대체</span><span class="meter m-lo" style="margin-left:auto"><span class="track"><span class="fill"></span></span><span class="lab">매치 약</span></span></div>
+            <div class="rc-grid">
+              <div><div class="k">상대가 찾는 것</div><div class="v">리테일 상품 데이터(도메인 불일치)</div></div>
+              <div><div class="k">접점</div><div class="v">데이터 정제 방법론은 공유 가능</div></div>
+            </div>
+            <div class="rc-out"><span class="badge2 hold">후속 보류</span> 도메인은 어긋났지만 정제 노하우로 15분 유익하게 대화. 명함 교환, 필요 시 연락하기로.</div>
+          </div>
+          <div class="body" style="margin-top:14px"><p class="quote">유보석(전체 10%) 덕에 빈 15분이 생기지 않았다. 완벽한 매치는 아니어도, 앉아 있는 시간이 낭비되지 않는다.</p></div>
+        </div>
+
+        <div class="beat win reveal">
+          <span class="dot"></span>
+          <div class="time">19:25 · 상담 3회전</div>
+          <h3>데이터와 결제가 만나는 지점</h3>
+          <div class="rcard">
+            <div class="rc-top"><span class="rc-co">㈜핀레일</span><span class="rc-tag assigned">사전 배정</span><span class="meter m-mid" style="margin-left:auto"><span class="track"><span class="fill"></span></span><span class="lab">매치 중</span></span></div>
+            <div class="rc-grid">
+              <div><div class="k">상대가 찾는 것</div><div class="v">여행 커머스 거래 데이터, 정산 근거 데이터</div></div>
+              <div><div class="k">맵스테이가 줄 수 있는 것</div><div class="v">거래 전 단계 POI·가격 데이터, 정합성 검증</div></div>
+            </div>
+            <div class="rc-out"><span class="badge2 next">다음 단계</span> 에이전트 결제·정산 파일럿에 데이터 공급자로 참여 검토. 후속 이메일로 요건 정리 합의.</div>
+          </div>
+          <div class="body" style="margin-top:14px"><p>세션 2(데이터 사업화)와 좌담의 결제 논의가 이 대화에서 실제로 이어진다 — 낮에 들은 얘기가 저녁 테이블에서 구체화된다.</p></div>
+        </div>
+
+        <div class="beat reveal">
+          <span class="dot"></span>
+          <div class="time">19:40 · 자유 교류</div>
+          <h3>낮에 찍어둔 상대를 직접 잡는다</h3>
+          <div class="rcard">
+            <div class="rc-top"><span class="rc-co">㈜웨이포인트</span><span class="rc-tag walkin">자유 교류 · 직접 접촉</span><span class="meter m-mid" style="margin-left:auto"><span class="track"><span class="fill"></span></span><span class="lab">매치 중</span></span></div>
+            <div class="rc-grid">
+              <div><div class="k">계기</div><div class="v">소개 발표에서 데이터 수요 확인 → 명찰 앰버끼리 알아봄</div></div>
+              <div><div class="k">접점</div><div class="v">여행 큐레이션에 POI 데이터 적용 가능성</div></div>
+            </div>
+            <div class="rc-out"><span class="badge2 next">다음 단계</span> 배정엔 없었지만 명함 교환, 1월 초 실무 미팅 제안 받음.</div>
+          </div>
+          <div class="body" style="margin-top:14px"><p class="quote">명찰 색이 신호가 됐다. 협업·실증(앰버)끼리는 서로를 알아보고 먼저 다가간다.</p></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- OUTCOME -->
+  <section class="act">
+    <div class="wrap">
+      <p class="act-label"><span class="step">결과</span> 서지원 팀장이 들고 나온 것</p>
+      <h2>90분이 성과 지표로 어떻게 잡히는가</h2>
+      <p class="lead">한 참가자의 하루가 사무국의 집계로 환산됩니다. 배정 구조이기 때문에 이 수치가 실제로 잡힙니다 — 자유 교류만으로는 불가능한 부분입니다.</p>
+      <div class="score">
+        <div class="sc reveal"><div class="n">3</div><div class="k">배정 상담 진행<br>(1건 현장 대체 포함)</div></div>
+        <div class="sc reveal"><div class="n">4</div><div class="k">실제 대화 상대<br>(배정 3 + 자유 교류 1)</div></div>
+        <div class="sc amber reveal"><div class="n">3</div><div class="k">후속 연결 의향<br>트립에이전트·핀레일·웨이포인트</div></div>
+        <div class="sc reveal"><div class="n">5</div><div class="k">교환 명함</div></div>
+      </div>
+      <ul class="resolved reveal">
+        <li><span class="ic">✓</span><div><h4>대화 상대 선정 곤란 해소</h4><p>발표·배정을 사전 공개해, 누구와 왜 앉을지 알고 시작했다.</p></div></li>
+        <li><span class="ic">✓</span><div><h4>노쇼가 빈 시간을 만들지 않음</h4><p>유보석 10%에서 현장 배정이 즉시 대체 — 15분이 낭비되지 않았다.</p></div></li>
+        <li><span class="ic">✓</span><div><h4>낮 세션이 저녁 상담으로 연결</h4><p>데이터·결제 논의가 핀레일 상담에서 구체적 협업 검토로 이어졌다.</p></div></li>
+        <li><span class="ic">✓</span><div><h4>측정 가능한 성과</h4><p>신청→배정→진행→후속 연결이 단계별로 집계돼 지표가 된다.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ORGANIZER VIEW -->
+  <section class="act">
+    <div class="wrap">
+      <p class="act-label"><span class="step">참고</span> 같은 90분, 사무국의 화면</p>
+      <h2>한 명이 아니라 34건이 동시에 돈다</h2>
+      <p class="lead">서지원 팀장의 경로는 34건 중 하나입니다. 전체로 보면 이렇게 집계됩니다 — 표 계산 프로그램 수동 배정으로 감당 가능한 규모입니다.</p>
+      <div class="score">
+        <div class="sc reveal"><div class="n">34<small>건</small></div><div class="k">사전 신청</div></div>
+        <div class="sc reveal"><div class="n">30<small>건</small></div><div class="k">실제 진행<br>(노쇼 4건 현장 흡수)</div></div>
+        <div class="sc amber reveal"><div class="n">18<small>건</small></div><div class="k">후속 연결 의향<br>(목표 15건 상회)</div></div>
+        <div class="sc reveal"><div class="n">5<small>개사</small></div><div class="k">현장 가입 상담<br>(미가입 → 전환)</div></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-in">
+      <span class="fb">AAIA 2026 · 네트워킹 시뮬레이션</span>
+      <span>운영사무국(KMAC) · 2026. 8. 25.</span>
+      <span class="prov">SIMULATION · 가상 시나리오</span>
+    </div>
+    <p class="foot-note">등장하는 기업명·인물·수치는 프로그램 설계 검증을 위한 가상 시뮬레이션이며 실재하지 않습니다. 매치 강도·후속 전환은 배정 방식의 작동을 보여주기 위한 모델 값(안)으로, 실제 성과를 보장하지 않습니다.</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var els=document.querySelectorAll(".reveal");
+    if(reduce||!("IntersectionObserver" in window)){els.forEach(function(e){e.classList.add("in")});return;}
+    var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target);}})},{threshold:.12,rootMargin:"0px 0px -6% 0px"});
+    els.forEach(function(e){io.observe(e)});
+  })();
+</script>

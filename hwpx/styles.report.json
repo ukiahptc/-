@@ -53,6 +53,7 @@
       "font_size_pt": 12,
       "align": "right",
       "line_spacing_percent": 110,
+      "space_after_pt": 12,
       "left_margin_pt": 0,
       "right_margin_pt": 0,
       "indent_first_line_pt": 0

@@ -84,7 +84,9 @@
       "left_margin_pt": 2,
       "right_margin_pt": 7,
       "indent_first_line_pt": 0,
-      "bullet_char": "□"
+      "bullet_char": "□",
+      "space_before_pt": 14,
+      "space_after_pt": 10
     },
     {
       "name": "○",
@@ -99,7 +101,8 @@
       "left_margin_pt": 19,
       "right_margin_pt": 7,
       "indent_first_line_pt": 0,
-      "bullet_char": "○"
+      "bullet_char": "○",
+      "space_after_pt": 10
     },
     {
       "name": "-",
@@ -114,7 +117,8 @@
       "left_margin_pt": 34,
       "right_margin_pt": 7,
       "indent_first_line_pt": 0,
-      "bullet_char": "-"
+      "bullet_char": "-",
+      "space_after_pt": 10
     },
     {
       "name": "·",
@@ -129,7 +133,8 @@
       "left_margin_pt": 49,
       "right_margin_pt": 7,
       "indent_first_line_pt": 0,
-      "bullet_char": "·"
+      "bullet_char": "·",
+      "space_after_pt": 10
     },
     {
       "name": "(표) 내용 기본서술",

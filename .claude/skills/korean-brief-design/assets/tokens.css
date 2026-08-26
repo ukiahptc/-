@@ -1,0 +1,179 @@
+/* ============================================================
+   한국어 브리핑 페이지 디자인 토큰 + 기본 컴포넌트
+   그대로 <style> 안에 붙여넣고, 필요한 컴포넌트만 남겨 쓴다.
+   색 하나도 미디어쿼리 안에만 정의하지 않는다 — 시스템 테마
+   (스탬프 없는 상태)에서 색이 깨지는 대표적 원인이다.
+   ============================================================ */
+
+:root{
+  /* 중립 — 순회색이 아니라 파랑 쪽으로 살짝 치우친 회색 */
+  --ground:#F4F6F9;  --surface:#FFFFFF;  --surface-2:#EEF1F6;
+  --ink:#14181F;     --ink-soft:#404A59; --ink-faint:#6B7688;
+  --line:#DCE1EA;    --line-strong:#C3CBD8;
+  /* 주 액센트 — 코발트 (한국 공문서 남색 계열을 현대화) */
+  --cobalt:#2C55D4;  --cobalt-deep:#1E3D9E; --cobalt-tint:#E7ECFB;
+  /* 시그널 — 앰버. 문서의 '차별화 축' 하나에만 쓴다 */
+  --amber:#C97E12;   --amber-bright:#E0A32E; --amber-tint:#FBF0DA;
+  /* 의미색 — 액센트와 별개 */
+  --ok:#1E7A56;      --ok-tint:#DBF0E6;
+  --warn:#B4472B;    --warn-tint:#F8E4DE;
+  --shadow:12px 14px 40px rgba(20,24,31,.09);
+}
+:root:not([data-theme="light"]){
+  @media (prefers-color-scheme:dark){
+    --ground:#0E1116;  --surface:#161B23;  --surface-2:#1E242E;
+    --ink:#E8ECF3;     --ink-soft:#AEB8C7; --ink-faint:#7C8799;
+    --line:#28303B;    --line-strong:#3A4452;
+    --cobalt:#6E90F5;  --cobalt-deep:#8AA6FF; --cobalt-tint:#1A2438;
+    --amber:#E0A32E;   --amber-bright:#F0BC55; --amber-tint:#2A2213;
+    --ok:#4FBF92;      --ok-tint:#132A20;
+    --warn:#E48166;    --warn-tint:#2C1712;
+    --shadow:14px 16px 44px rgba(0,0,0,.42);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1116;  --surface:#161B23;  --surface-2:#1E242E;
+  --ink:#E8ECF3;     --ink-soft:#AEB8C7; --ink-faint:#7C8799;
+  --line:#28303B;    --line-strong:#3A4452;
+  --cobalt:#6E90F5;  --cobalt-deep:#8AA6FF; --cobalt-tint:#1A2438;
+  --amber:#E0A32E;   --amber-bright:#F0BC55; --amber-tint:#2A2213;
+  --ok:#4FBF92;      --ok-tint:#132A20;
+  --warn:#E48166;    --warn-tint:#2C1712;
+  --shadow:14px 16px 44px rgba(0,0,0,.42);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;
+  background:var(--ground);          /* 반드시 토큰으로 — 투명하면 호스트 배경을 빌린다 */
+  color:var(--ink);
+  font-family:"IBM Plex Sans KR","Gothic A1",system-ui,sans-serif;
+  line-height:1.72;                  /* 한글은 라틴보다 넉넉해야 읽힌다 */
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+.mono{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1000px;margin:0 auto;padding:0 32px}
+@media (max-width:640px){.wrap{padding:0 20px}}
+
+/* ---------- 히어로 ---------- */
+header.hero{
+  border-bottom:1px solid var(--line);
+  background:radial-gradient(120% 100% at 88% -10%, var(--cobalt-tint) 0%, transparent 55%);
+}
+.hero-in{padding:60px 0 48px}
+.kick{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--cobalt-deep);font-weight:600;margin-bottom:18px;
+}
+h1{
+  font-family:"Gothic A1",sans-serif;font-weight:900;
+  font-size:clamp(32px,5.6vw,60px);line-height:1.04;letter-spacing:-.03em;
+  margin:0;text-wrap:balance;
+}
+.hero-sub{margin:20px 0 0;max-width:58ch;color:var(--ink-soft);font-size:16.5px}
+
+/* ---------- 섹션 ---------- */
+section{padding:64px 0;border-bottom:1px solid var(--line)}
+.eyebrow{
+  display:flex;align-items:center;gap:12px;font-family:"IBM Plex Mono",monospace;
+  font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 8px;
+}
+.eyebrow .no{color:var(--cobalt);border:1px solid var(--line-strong);border-radius:5px;padding:1px 7px;font-weight:600}
+h2.sec{
+  font-family:"Gothic A1",sans-serif;font-weight:800;font-size:clamp(24px,3.4vw,34px);
+  letter-spacing:-.02em;line-height:1.14;margin:0 0 12px;text-wrap:balance;
+}
+.lead{max-width:62ch;color:var(--ink-soft);font-size:15.5px;margin:0 0 34px}
+.lead b{color:var(--ink)}
+
+/* ---------- 카드 (좌측 레일) ---------- */
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:24px;position:relative;overflow:hidden;
+}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--cobalt)}
+.card.flag::before{background:var(--amber-bright)}
+.card.bad::before{background:var(--warn)}
+.card .t{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--cobalt-deep)}
+.card.flag .t{color:var(--amber)} .card.bad .t{color:var(--warn)}
+.card h3{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:18px;margin:8px 0;letter-spacing:-.01em}
+.card p{margin:0;font-size:14.5px;color:var(--ink-soft)}
+
+/* ---------- 표 (가로 스크롤은 자기 컨테이너 안에서) ---------- */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table.cmp{width:100%;border-collapse:collapse;font-size:14px;min-width:600px}
+table.cmp th{
+  text-align:left;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);
+  font-weight:600;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--surface-2);
+}
+table.cmp td{padding:15px 18px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-soft)}
+table.cmp tr:last-child td{border-bottom:0}
+table.cmp tr.pick td{background:var(--cobalt-tint)}      /* 권장안 한 행만 강조 */
+table.cmp .plan{font-weight:700;color:var(--ink);white-space:nowrap}
+table.cmp .num{font-family:"IBM Plex Mono",monospace;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* ---------- 타임라인 (mono 시각 + 색 노드) ---------- */
+.tl{position:relative}
+.tl::before{content:"";position:absolute;left:96px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--cobalt),var(--line))}
+@media (max-width:640px){.tl::before{left:9px}}
+.slot{position:relative;display:grid;grid-template-columns:88px 1fr;gap:26px;padding:9px 0}
+@media (max-width:640px){.slot{grid-template-columns:1fr;gap:6px;padding-left:34px}}
+.slot .time{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-soft);text-align:right;padding-top:2px;font-weight:500}
+@media (max-width:640px){.slot .time{text-align:left}}
+.slot .node{position:absolute;left:91px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--line-strong)}
+@media (max-width:640px){.slot .node{left:4px}}
+.slot .what{font-size:15px;color:var(--ink)}
+.slot .what .tag{font-size:11.5px;font-family:"IBM Plex Mono",monospace;color:var(--ink-faint);margin-left:8px}
+.slot.key .node{background:var(--cobalt);border-color:var(--cobalt);box-shadow:0 0 0 5px var(--cobalt-tint)}
+.slot.key .what{font-weight:600}
+.slot.hinge .node{background:var(--amber-bright);border-color:var(--amber-bright);box-shadow:0 0 0 5px var(--amber-tint)}
+.slot.rest .time,.slot.rest .what{color:var(--ink-faint)}
+
+/* ---------- 수치 타일 ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:720px){.stats{grid-template-columns:1fr 1fr}}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 20px}
+.stat .n{font-family:"Gothic A1",sans-serif;font-weight:900;font-size:32px;letter-spacing:-.02em;line-height:1;color:var(--cobalt);font-variant-numeric:tabular-nums}
+.stat .n small{font-size:14px;font-weight:700;color:var(--ink-soft);margin-left:3px}
+.stat.amber .n{color:var(--amber)}
+.stat .k{margin-top:8px;font-size:12.5px;color:var(--ink-faint);line-height:1.55}
+
+/* ---------- 목록 (마름모 불릿 — 원문 개조식의 잔재를 지운다) ---------- */
+.points{list-style:none;margin:26px 0 0;padding:0;display:flex;flex-direction:column;gap:13px}
+.points li{position:relative;padding-left:22px;font-size:14.5px;color:var(--ink-soft)}
+.points li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;border-radius:2px;background:var(--cobalt);transform:rotate(45deg)}
+.points li b{color:var(--ink);font-weight:600}
+
+/* ---------- 주의 박스 ---------- */
+.note{background:var(--amber-tint);border:1px solid color-mix(in srgb,var(--amber) 26%,transparent);border-radius:16px;padding:24px 26px}
+.note h3{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:17px;margin:0 0 14px;color:var(--amber)}
+.note ul{margin:0;padding-left:18px;font-size:14px;color:var(--ink-soft)}
+.note li{margin-bottom:9px} .note li:last-child{margin-bottom:0}
+
+/* ---------- 칩 / 알약 ---------- */
+.chip{
+  display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);
+  border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:500;color:var(--ink-soft);
+}
+.chip b{color:var(--ink);font-weight:700}
+
+/* ---------- 푸터 + 초안 표기 ---------- */
+footer{padding:44px 0 60px;color:var(--ink-faint);font-size:13px}
+.foot-in{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center}
+.foot-in .fb{font-family:"Gothic A1",sans-serif;font-weight:800;color:var(--ink);font-size:15px}
+.prov{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--amber);
+  border:1px solid color-mix(in srgb,var(--amber) 34%,var(--line));border-radius:5px;padding:1px 7px;
+}
+.foot-note{margin-top:12px;font-size:12px;max-width:66ch;line-height:1.6}
+
+/* ---------- 스크롤 등장 ---------- */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* ---------- 인쇄 ---------- */
+@media print{nav{position:static}section{break-inside:avoid;page-break-inside:avoid}}
